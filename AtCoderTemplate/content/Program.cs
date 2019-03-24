@@ -29,8 +29,9 @@ namespace AtCoderTemplate {
             return Enumerable.Range (0, seq.First ().Count ()).Select (i => seq.Select (items => items[i]).ToList ()).ToList ();
         }
         static void PrintEnum<T> (IEnumerable<T> list) {
-            foreach (var item in list) {
-                Console.Write ($"{item} ");
+            Console.Write (list.First ());
+            foreach (var item in list.Skip (1)) {
+                Console.Write ($" {item}");
             }
             Console.Write ("\n");
         }

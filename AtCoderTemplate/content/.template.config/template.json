@@ -8,6 +8,14 @@
     "identity": "AtCoderContest.Template.CSharp",
     "name": "AtCoderContestTemplate",
     "shortName": "actemp",
+    "symbols": {
+        "skipRestore": {
+            "type": "parameter",
+            "datatype": "bool",
+            "description": "If specified, skips the automatic restore of the project on create.",
+            "defaultValue": "false"
+        }
+    },
     "postActions": [
         {
             "condition": "(!skipRestore)",
@@ -19,6 +27,11 @@
             ],
             "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
             "continueOnError": true
+        }
+    ],
+    "primaryOutputs": [
+        {
+            "path": "AtCoderTemplate.csproj"
         }
     ]
 }

@@ -1,7 +1,7 @@
 @echo off 
 mkdir ABC%1
 cd ABC%1
-dotnet new abctemp -o A
-dotnet new abctemp -o B
-dotnet new abctemp -o C
-dotnet new abctemp -o D
+dotnet new actemp -o A
+dotnet new actemp -o B
+dotnet new actemp -o C
+dotnet new actemp -o D
