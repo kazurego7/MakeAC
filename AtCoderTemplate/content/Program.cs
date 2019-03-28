@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Math;
+using static System.Linq.Enumerable;
+using static AtCoderTemplate.MyExtensions;
+using static AtCoderTemplate.MyInputOutputs;
+using static AtCoderTemplate.MyNumericFunctions;
 
 namespace AtCoderTemplate {
     class Program {
-        static void Main (string[] args) {
+        static void Main (string[] args) { }
+    }
 
-        }
+    static class MyInputOutputs {
         /* Input & Output*/
-        static int ReadInt () {
+        public static int ReadInt () {
             return int.Parse (Console.ReadLine ());
         }
-        static List<int> ReadInts () {
+        public static List<int> ReadInts () {
             return Console.ReadLine ().Split (' ').Select (c => int.Parse (c)).ToList ();
         }
-        static List<List<int>> ReadColumns (int n) {
+        public static List<List<int>> ReadColumns (int n) {
             /*
             入力例
             A1 B1
@@ -25,37 +31,38 @@ namespace AtCoderTemplate {
             出力例
             [[A1,A2,...,An], [B1,B2,...,Bn]]
             */
-            var seq = Enumerable.Range (0, n).Select (i => ReadInts ()).ToList ();
-            return Enumerable.Range (0, seq.First ().Count ()).Select (i => seq.Select (items => items[i]).ToList ()).ToList ();
+            var seq = Range (0, n).Select (i => ReadInts ()).ToList ();
+            return Range (0, seq.First ().Count ()).Select (i => seq.Select (items => items[i]).ToList ()).ToList ();
         }
-        static void PrintEnum<T> (IEnumerable<T> list) {
+        public static void PrintEnum<T> (IEnumerable<T> list) {
             Console.Write (list.First ());
             foreach (var item in list.Skip (1)) {
                 Console.Write ($" {item}");
             }
             Console.Write ("\n");
         }
-        static void PrintLnEnum<T> (IEnumerable<T> list) {
+        public static void PrintLnEnum<T> (IEnumerable<T> list) {
             foreach (var item in list) {
                 Console.WriteLine (item);
             }
         }
+    }
 
-        /* Numeric Function */
-        static int Fact (int n) {
-            return Enumerable.Range (1, n).Aggregate (1, ((i, k) => i * k));
+    static class MyNumericFunctions {
+        public static int Fact (int n) {
+            return Range (1, n).Aggregate (1, ((i, k) => i * k));
         }
-        static int PermNum (int n, int m) {
+        public static int PermNum (int n, int m) {
             if (m > n) {
                 return 0;
             }
-            return Enumerable.Range (n - m, m + 1).Aggregate (1, ((i, k) => i * k));
+            return Range (n - m, m + 1).Aggregate (1, ((i, k) => i * k));
         }
-        static int CombNum (int n, int m) {
+        public static int CombNum (int n, int m) {
             return PermNum (n, m) / Fact (m);
         }
         // 最大公約数 (m ≧ n)
-        static int GCD (int m, int n) {
+        public static int GCD (int m, int n) {
             if (n == 0) {
                 return m;
             } else {
@@ -63,9 +70,43 @@ namespace AtCoderTemplate {
             }
         }
         // 最小公倍数 (m ≧ n)
-        static int LCM (int m, int n) {
+        public static int LCM (int m, int n) {
             return GCD (m, n) / (m * n);
         }
+    }
 
+    static class MyExtensions {
+        /// <summary>
+        /// 一つ前の値との差を得る
+        /// O(N * log(N))
+        /// </summary>
+        public static IEnumerable<int> Diff (this IEnumerable<int> source) {
+            var list = source.ToList ();
+            return Range (1, list.Count - 1)
+                .Select (i => list[i] - list[i - 1]);
+        }
+
+        /// <summary>
+        /// 累積和を得る
+        /// O(N * log(N))
+        /// </summary>
+        public static IEnumerable<int> CumSum (this IEnumerable<int> source) {
+            var list = source.ToList ();
+            var result = new List<int> { list[0] };
+            foreach (var i in Range (1, source.Count () - 1)) {
+                result.Add (result[i - 1] + list[i]);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 昇順にソートしたインデックスを得る
+        /// </summary>
+        public static IEnumerable<int> SortIndex<T> (this IEnumerable<T> source) {
+            return source
+                .Select ((item, i) => new { Item = item, Index = i })
+                .OrderBy (x => x.Item)
+                .Select (x => x.Index);
+        }
     }
 }
