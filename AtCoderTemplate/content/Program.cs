@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using static System.Math;
-using static System.Linq.Enumerable;
 using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyInputOutputs;
 using static AtCoderTemplate.MyNumericFunctions;
@@ -31,8 +30,8 @@ namespace AtCoderTemplate {
             出力例
             [[A1,A2,...,An], [B1,B2,...,Bn]]
             */
-            var seq = Range (0, n).Select (i => ReadInts ()).ToList ();
-            return Range (0, seq.First ().Count ()).Select (i => seq.Select (items => items[i]).ToList ()).ToList ();
+            var seq = Enumerable.Range (0, n).Select (i => ReadInts ()).ToList ();
+            return Enumerable.Range (0, seq.First ().Count ()).Select (i => seq.Select (items => items[i]).ToList ()).ToList ();
         }
         public static void PrintEnum<T> (IEnumerable<T> list) {
             Console.Write (list.First ());
@@ -50,13 +49,13 @@ namespace AtCoderTemplate {
 
     static class MyNumericFunctions {
         public static int Fact (int n) {
-            return Range (1, n).Aggregate (1, ((i, k) => i * k));
+            return Enumerable.Range (1, n).Aggregate (1, ((i, k) => i * k));
         }
         public static int PermNum (int n, int m) {
             if (m > n) {
                 return 0;
             }
-            return Range (n - m, m + 1).Aggregate (1, ((i, k) => i * k));
+            return Enumerable.Range (n - m, m + 1).Aggregate (1, ((i, k) => i * k));
         }
         public static int CombNum (int n, int m) {
             return PermNum (n, m) / Fact (m);
@@ -82,7 +81,7 @@ namespace AtCoderTemplate {
         /// </summary>
         public static IEnumerable<int> Diff (this IEnumerable<int> source) {
             var list = source.ToList ();
-            return Range (1, list.Count - 1)
+            return Enumerable.Range (1, list.Count - 1)
                 .Select (i => list[i] - list[i - 1]);
         }
 
@@ -93,7 +92,7 @@ namespace AtCoderTemplate {
         public static IEnumerable<int> CumSum (this IEnumerable<int> source) {
             var list = source.ToList ();
             var result = new List<int> { list[0] };
-            foreach (var i in Range (1, source.Count () - 1)) {
+            foreach (var i in Enumerable.Range (1, source.Count () - 1)) {
                 result.Add (result[i - 1] + list[i]);
             }
             return result;
