@@ -153,7 +153,7 @@ namespace AtCoderTemplate {
         }
 
         public static bool IsEmpty<T> (this IEnumerable<T> source) {
-            return source.Count () == 0;
+            return !source.Any ();
         }
 
         /// <summary>
