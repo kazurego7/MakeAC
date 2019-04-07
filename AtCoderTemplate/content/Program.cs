@@ -134,6 +134,24 @@ namespace AtCoderTemplate {
     }
 
     static class MyExtensions {
+        // AppendとPrependが、.NET Standard 1.6からの追加で、Mono 4.6.2 はそれに対応して仕様はあるが、実装がない
+        public static IEnumerable<T> Append<T> (this IEnumerable<T> source, T element) {
+            return source.Concat (Enumerable.Repeat (element, 1));
+        }
+
+        public static IEnumerable<T> Prepend<T> (this IEnumerable<T> source, T element) {
+            return Enumerable.Repeat (element, 1).Concat (source);
+        }
+
+        // TakeLastとSkipLastが、.Net Standard 2.1からの追加で、Mono 4.6.2 はそれに対応していない
+        public static IEnumerable<T> TakeLast<T> (this IEnumerable<T> source, int count) {
+            return source.Skip (source.Count () - count);
+        }
+
+        public static IEnumerable<T> SkipLast<T> (this IEnumerable<T> source, int count) {
+            return source.Take (source.Count () - count);
+        }
+
         public static bool IsEmpty<T> (this IEnumerable<T> source) {
             return source.Count () == 0;
         }
