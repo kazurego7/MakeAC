@@ -8,9 +8,7 @@ using static AtCoderTemplate.MyNumericFunctions;
 
 namespace AtCoderTemplate {
     class Program {
-        static void Main (string[] args) {
-            Print2DArray (ReadIntColumns (0));
-        }
+        static void Main (string[] args) { }
     }
 
     static class MyInputOutputs {
@@ -97,35 +95,87 @@ namespace AtCoderTemplate {
     }
 
     static class MyNumericFunctions {
-        public static int Fact (int n) {
-            return Enumerable.Range (1, n).Aggregate (1, ((i, k) => i * k));
-        }
-        public static int PermNum (int n, int m) {
-            if (m > n) {
+
+        public static int nPk (int n, int k) {
+            if (k > n) {
                 return 0;
+            } else {
+                return Enumerable.Range (n - k + 1, k).Aggregate (1, ((i, m) => i * m));
             }
-            return Enumerable.Range (n - m, m + 1).Aggregate (1, ((i, k) => i * k));
         }
-        public static int CombNum (int n, int m) {
-            return PermNum (n, m) / Fact (m);
+        public static int Fact (int n) {
+            return nPk (n, n);
         }
-        // 最大公約数 (m ≧ n)
+        public static int nCk (int n, int k) {
+            if (k > n) {
+                return 0;
+            } else {
+                return nPk (n, k) / Fact (k);
+            }
+        }
+        // 最大公約数
         public static int GCD (int m, int n) {
-            if (n == 0) {
+            if (m < n) {
+                return GCD (n, m);
+            } else if (n == 0) {
                 return m;
             } else {
                 return GCD (n, m % n);
             }
         }
-        // 最小公倍数 (m ≧ n)
+        // 最小公倍数
         public static int LCM (int m, int n) {
-            return GCD (m, n) / (m * n);
+            if (m < n) {
+                return LCM (n, m);
+            } else {
+                return (m * n) / GCD (m, n);
+            }
         }
     }
 
     static class MyExtensions {
         public static bool IsEmpty<T> (this IEnumerable<T> source) {
             return source.Count () == 0;
+        }
+
+        /// <summary>
+        /// インデックスiの位置の要素からk個取り除く
+        /// O(N)
+        /// </summary>
+        public static IEnumerable<T> TakeAwayRange<T> (this IEnumerable<T> source, int i, int count) {
+            return source.Take (i).Concat (source.Skip (i + count));
+        }
+
+        /// <summary>
+        /// インデックスiの位置の要素を取り除く
+        /// O(N)
+        /// </summary>
+        public static IEnumerable<T> TakeAwayAt<T> (this IEnumerable<T> source, int i) {
+            return source.TakeAwayRange (i, 1);
+        }
+
+        /// <summary>
+        /// インデックスiの位置にシーケンスを挿入する
+        /// O(N + K)
+        /// </summary>
+        public static IEnumerable<T> InsertEnumAt<T> (this IEnumerable<T> source, int i, IEnumerable<T> inserted) {
+            return source.Take (i).Concat (inserted).Concat (source.Skip (i));
+        }
+
+        /// <summary>
+        /// 順列を得る
+        /// O(N!)
+        /// </summary>
+        public static IEnumerable<IEnumerable<T>> Perm<T> (this IEnumerable<T> source, int n) {
+            if (n == 0 || source.IsEmpty () || source.Count () < n) {
+                return Enumerable.Empty<IEnumerable<T>> ();
+            } else if (n == 1) {
+                return source.Select (i => new List<T> { i });
+            } else {
+                var nexts = source.Select ((x, i) =>
+                    new { next = source.Take (i).Concat (source.Skip (i + 1)), selected = source.Take (i + 1).Last () });
+                return nexts.SelectMany (next => Perm (next.next, n - 1).Select (item => item.Prepend (next.selected)));
+            }
         }
 
         /// <summary>
