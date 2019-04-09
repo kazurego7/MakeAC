@@ -1,9 +1,0 @@
-D:\WorkSpace\Tools\AtCoderTemplate\content\bin\Debug\net461\AtCoderTemplate.exe.config
-D:\WorkSpace\Tools\AtCoderTemplate\content\bin\Debug\net461\AtCoderTemplate.exe
-D:\WorkSpace\Tools\AtCoderTemplate\content\bin\Debug\net461\AtCoderTemplate.pdb
-D:\WorkSpace\Tools\AtCoderTemplate\content\obj\Debug\net461\AtCoderTemplate.csprojAssemblyReference.cache
-D:\WorkSpace\Tools\AtCoderTemplate\content\obj\Debug\net461\AtCoderTemplate.csproj.CoreCompileInputs.cache
-D:\WorkSpace\Tools\AtCoderTemplate\content\obj\Debug\net461\AtCoderTemplate.AssemblyInfoInputs.cache
-D:\WorkSpace\Tools\AtCoderTemplate\content\obj\Debug\net461\AtCoderTemplate.AssemblyInfo.cs
-D:\WorkSpace\Tools\AtCoderTemplate\content\obj\Debug\net461\AtCoderTemplate.exe
-D:\WorkSpace\Tools\AtCoderTemplate\content\obj\Debug\net461\AtCoderTemplate.pdb
