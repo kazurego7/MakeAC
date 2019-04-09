@@ -55,6 +55,18 @@ namespace AtCoderTemplate {
             var m = rows.FirstOrDefault ()?.Count () ?? 0;
             return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i]).ToList ()).ToList ();
         }
+
+        public static void Print<T> (T item) {
+            Console.WriteLine (item);
+        }
+        public static void PrintIf<T1, T2> (bool condition, T1 trueResult, T2 falseResult) {
+            if (condition) {
+                Console.WriteLine (trueResult);
+            } else {
+                Console.WriteLine (falseResult);
+            }
+        }
+
         public static void PrintRow<T> (IEnumerable<T> list) {
             /* 横ベクトルで表示
             A B C D ...
@@ -84,29 +96,28 @@ namespace AtCoderTemplate {
                 PrintRow (row);
             }
         }
-
-        public static void PrintIf<T1, T2> (bool condition, T1 trueResult, T2 falseResult) {
-            if (condition) {
-                Console.WriteLine (trueResult);
-            } else {
-                Console.WriteLine (falseResult);
-            }
-        }
     }
 
     static class MyNumericFunctions {
+        public static bool isEven (long a) {
+            return a % 2 == 0;
+        }
 
-        public static int nPk (int n, int k) {
+        public static bool isOdd (long a) {
+            return !isEven (a);
+        }
+
+        public static long nPk (int n, int k) {
             if (k > n) {
                 return 0;
             } else {
-                return Enumerable.Range (n - k + 1, k).Aggregate (1, ((i, m) => i * m));
+                return Enumerable.Range (n - k + 1, k).Aggregate ((long) 1, ((i, m) => i * m));
             }
         }
-        public static int Fact (int n) {
+        public static long Fact (int n) {
             return nPk (n, n);
         }
-        public static int nCk (int n, int k) {
+        public static long nCk (int n, int k) {
             if (k > n) {
                 return 0;
             } else {
@@ -114,7 +125,8 @@ namespace AtCoderTemplate {
             }
         }
         // 最大公約数
-        public static int GCD (int m, int n) {
+
+        public static long GCD (long m, long n) {
             if (m < n) {
                 return GCD (n, m);
             } else if (n == 0) {
@@ -124,7 +136,7 @@ namespace AtCoderTemplate {
             }
         }
         // 最小公倍数
-        public static int LCM (int m, int n) {
+        public static long LCM (long m, long n) {
             if (m < n) {
                 return LCM (n, m);
             } else {
@@ -197,24 +209,46 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// 一つ前の値との差を得る
-        /// O(N * log(N))
+        /// シーケンスの隣り合う要素を2引数の関数に適用したシーケンスを得る
         /// </summary>
-        public static IEnumerable<int> Diff (this IEnumerable<int> source) {
+        /// <para>O(N)</para>
+        /// <param name="source">元のシーケンス</param>
+        /// <param name="func">2引数関数</param>
+        /// <example>[1,2,3,4].MapAdjacent(f) => [f(1,2), f(2,3), f(3,4)]</example>
+        public static IEnumerable<TR> MapAdjacent<T1, TR> (this IEnumerable<T1> source, Func<T1, T1, TR> func) {
             var list = source.ToList ();
             return Enumerable.Range (1, list.Count - 1)
-                .Select (i => list[i] - list[i - 1]);
+                .Select (i => func (list[i], list[i - 1]));
         }
 
         /// <summary>
-        /// 累積和を得る
-        /// O(N * log(N))
+        /// 累積項を要素にもつシーケンスを得る(初項は、first)
+        /// <para>O(N)</para>
         /// </summary>
-        public static IEnumerable<int> CumSum (this IEnumerable<int> source) {
+        /// <param name="source">元のシーケンス</param>
+        /// <param name="func">2引数関数f</param>
+        /// <param name="first">func(first, source[0])のための初項</param>
+        /// <example> [1,2,3].Scanl1(f,0) => [0, f(0,1), f(f(0,1),2), f(f(f(0,1),2),3)]</example>
+        public static IEnumerable<TR> Scanl<T, TR> (this IEnumerable<T> source, Func<TR, T, TR> func, TR first) {
             var list = source.ToList ();
-            var result = new List<int> { list[0] };
+            var result = new List<TR> { first };
+            foreach (var i in Enumerable.Range (1, source.Count ())) {
+                result.Add (func (result[i - 1], list[i]));
+            }
+            return result;
+        }
+        /// <summary>
+        /// 累積項を要素にもつシーケンスを得る（初項は、source.First()）
+        /// <para>O(N)</para>
+        /// </summary>
+        /// <param name="source">元のシーケンス</param>
+        /// <param name="func">2引数関数f</param>
+        /// <example> [1,2,3].Scanl1(f) => [1, f(1,2), f(f(1,2),3)]</example>
+        public static IEnumerable<T> Scanl1<T> (this IEnumerable<T> source, Func<T, T, T> func) {
+            var list = source.ToList ();
+            var result = new List<T> { list[0] };
             foreach (var i in Enumerable.Range (1, source.Count () - 1)) {
-                result.Add (result[i - 1] + list[i]);
+                result.Add (func (result[i - 1], list[i]));
             }
             return result;
         }
@@ -222,6 +256,7 @@ namespace AtCoderTemplate {
         /// <summary>
         /// 昇順にソートしたインデックスを得る
         /// </summary>
+        /// <para>O(N * log N)</para>
         public static IEnumerable<int> SortIndex<T> (this IEnumerable<T> source) {
             return source
                 .Select ((item, i) => new { Item = item, Index = i })

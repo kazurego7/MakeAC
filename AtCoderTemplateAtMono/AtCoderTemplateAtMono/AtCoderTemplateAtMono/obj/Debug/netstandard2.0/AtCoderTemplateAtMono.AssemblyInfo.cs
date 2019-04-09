@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("AtCoderTemplate")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("AtCoderTemplateAtMono")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("AtCoderTemplate")]
-[assembly: System.Reflection.AssemblyTitleAttribute("AtCoderTemplate")]
+[assembly: System.Reflection.AssemblyProductAttribute("AtCoderTemplateAtMono")]
+[assembly: System.Reflection.AssemblyTitleAttribute("AtCoderTemplateAtMono")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // MSBuild WriteCodeFragment クラスによって生成されました。
