@@ -234,11 +234,11 @@ namespace AtCoderTemplate {
         /// <param name="func">2引数関数f</param>
         /// <param name="first">func(first, source[0])のための初項</param>
         /// <example> [1,2,3].Scanl1(f,0) => [0, f(0,1), f(f(0,1),2), f(f(f(0,1),2),3)]</example>
-        public static IEnumerable<TR> Scanl<T, TR> (this IEnumerable<T> source, Func<TR, T, TR> func, TR first) {
+        public static IEnumerable<TR> Scanl<T, TR> (this IEnumerable<T> source, TR first, Func<TR, T, TR> func) {
             var list = source.ToList ();
             var result = new List<TR> { first };
-            foreach (var i in Enumerable.Range (1, source.Count ())) {
-                result.Add (func (result[i - 1], list[i]));
+            foreach (var i in Enumerable.Range (0, source.Count ())) {
+                result.Add (func (result[i], list[i]));
             }
             return result;
         }
