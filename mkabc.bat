@@ -8,5 +8,7 @@ dotnet new actemp -o A
 dotnet new actemp -o B
 dotnet new actemp -o C
 dotnet new actemp -o D
+dotnet new actemp -o E
+dotnet new actemp -o F
 cd ../
 )
