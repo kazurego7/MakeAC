@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using static System.Math;
 using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyInputOutputs;
@@ -19,10 +18,6 @@ namespace AtCoderTemplate {
         }
         public static long ReadLong () {
             return long.Parse (Console.ReadLine ());
-        }
-
-        public static BigInteger ReadInteger () {
-            return BigInteger.Parse (Console.ReadLine ());
         }
         public static List<int> ReadInts () {
             return Console.ReadLine ().Split (' ').Select (c => int.Parse (c)).ToList ();
