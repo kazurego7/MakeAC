@@ -678,11 +678,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\WorkSpace\\Tools\\AtCoderTemplates\\AtCoderMainTemplate\\content\\AtCoderTemplate.csproj",
+      "projectUniqueName": "D:\\WorkSpace\\Tools\\AtCoderTemplate\\content\\AtCoderTemplate.csproj",
       "projectName": "AtCoderTemplate",
-      "projectPath": "d:\\WorkSpace\\Tools\\AtCoderTemplates\\AtCoderMainTemplate\\content\\AtCoderTemplate.csproj",
+      "projectPath": "D:\\WorkSpace\\Tools\\AtCoderTemplate\\content\\AtCoderTemplate.csproj",
       "packagesPath": "C:\\Users\\kazuki_wada\\.nuget\\packages\\",
-      "outputPath": "d:\\WorkSpace\\Tools\\AtCoderTemplates\\AtCoderMainTemplate\\content\\obj\\",
+      "outputPath": "D:\\WorkSpace\\Tools\\AtCoderTemplate\\content\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\ProgramData\\Xamarin\\NuGet\\",
