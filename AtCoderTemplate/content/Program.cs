@@ -268,5 +268,27 @@ namespace AtCoderTemplate {
                 .OrderBy (x => x.Item)
                 .Select (x => x.Index);
         }
+
+        /// <summary>
+        /// 二分探索法
+        /// </summary>
+        /// <param name="list">探索するリスト</param>
+        /// <param name="predicate">条件の述語関数</param>
+        /// <param name="ng">条件を満たさない既知のindex</param>
+        /// <param name="ok">条件を満たす既知のindex</param>
+        /// <typeparam name="T">順序関係を持つ型(IComparableを実装する)</typeparam>
+        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
+        public static int BinarySearch<T> (this IList<T> list, Func<T, bool> predicate, int ng, int ok)
+        where T : IComparable<T> {
+            while (Abs (ok - ng) > 1) {
+                int mid = (ok + ng) / 2;
+                if (predicate (list[mid])) {
+                    ok = mid;
+                } else {
+                    ng = mid;
+                }
+            }
+            return ok;
+        }
     }
 }

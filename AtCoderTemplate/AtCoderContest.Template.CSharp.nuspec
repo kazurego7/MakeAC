@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>AtCoderContest.Template.CSharp</id>
-    <version>1.7.7</version>
+    <version>1.8.0</version>
     <description>
       AtCoder Contest Template
     </description>
