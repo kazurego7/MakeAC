@@ -5,6 +5,7 @@ using static System.Math;
 using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyInputOutputs;
 using static AtCoderTemplate.MyNumericFunctions;
+using static AtCoderTemplate.MyAlgorithm;
 
 namespace AtCoderTemplate {
     public class Program {
@@ -150,6 +151,98 @@ namespace AtCoderTemplate {
         }
     }
 
+    static class MyAlgorithm {
+        /// <summary>
+        /// 二分探索法
+        /// O(log N)
+        /// </summary>
+        /// <param name="list">探索するリスト</param>
+        /// <param name="predicate">条件の述語関数</param>
+        /// <param name="ng">条件を満たさない既知のindex</param>
+        /// <param name="ok">条件を満たす既知のindex</param>
+        /// <typeparam name="T">順序関係を持つ型(IComparableを実装する)</typeparam>
+        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
+        public static int BinarySearch<T> (IList<T> list, Func<T, bool> predicate, int ng, int ok)
+        where T : IComparable<T> {
+            while (Abs (ok - ng) > 1) {
+                int mid = (ok + ng) / 2;
+                if (predicate (list[mid])) {
+                    ok = mid;
+                } else {
+                    ng = mid;
+                }
+            }
+            return ok;
+        }
+
+        /// <summary>
+        /// 辺の集まりを操作するオブジェクト
+        /// </summary>
+        public class Edge {
+            long[, ] edge;
+            public int NodeNum { get; }
+            public Edge (int nodeNum, long overDistance) {
+                var edge = new long[nodeNum, nodeNum];
+                foreach (var i in Enumerable.Range (0, nodeNum)) {
+                    foreach (var j in Enumerable.Range (0, nodeNum)) {
+                        if (i != j) {
+                            edge[i, j] = overDistance;
+                        } else {
+                            edge[i, j] = 0;
+                        }
+                    }
+                }
+
+                this.edge = edge;
+                this.NodeNum = nodeNum;
+            }
+            public Edge (Edge edge) {
+                this.edge = new long[edge.NodeNum, edge.NodeNum];
+                foreach (var i in Enumerable.Range (0, edge.NodeNum)) {
+                    foreach (var j in Enumerable.Range (0, edge.NodeNum)) {
+                        this.edge[i, j] = edge.GetLength (i, j);
+                    }
+                }
+                this.NodeNum = edge.NodeNum;
+            }
+
+            public List<List<long>> ToList () {
+                return Enumerable.Range (0, NodeNum).Select (i =>
+                    Enumerable.Range (0, NodeNum).Select (j =>
+                        edge[i, j]
+                    ).ToList ()
+                ).ToList ();
+            }
+
+            public void Add (int node1, int node2, long distance) {
+                edge[node1, node2] = distance;
+            }
+
+            public long GetLength (int node1, int node2) {
+                return edge[node1, node2];
+            }
+        }
+
+        /// <summary>
+        /// ワーシャルフロイド法
+        /// O(N^3)
+        /// </summary>
+        /// <param name="edge">Edgeオブジェクト</param>
+        /// <param name="nodeNum">ノードの数</param>
+        /// <returns>各ノード間の最短距離を辺として持つEdgeオブジェクト</returns>
+        public static Edge WarshallFloyd (Edge edge) {
+            var res = new Edge (edge);
+            foreach (var b in Enumerable.Range (0, edge.NodeNum)) {
+                foreach (var a in Enumerable.Range (0, edge.NodeNum)) {
+                    foreach (var c in Enumerable.Range (0, edge.NodeNum)) {
+                        res.Add (a, c, Min (res.GetLength (a, c), res.GetLength (a, b) + res.GetLength (b, c)));
+                    }
+                }
+            }
+            return res;
+        }
+    }
+
     static class MyExtensions {
         // AppendとPrependが、.NET Standard 1.6からの追加で、Mono 4.6.2 はそれに対応して仕様はあるが、実装がない
         public static IEnumerable<T> Append<T> (this IEnumerable<T> source, T element) {
@@ -267,28 +360,6 @@ namespace AtCoderTemplate {
                 .Select ((item, i) => new { Item = item, Index = i })
                 .OrderBy (x => x.Item)
                 .Select (x => x.Index);
-        }
-
-        /// <summary>
-        /// 二分探索法
-        /// </summary>
-        /// <param name="list">探索するリスト</param>
-        /// <param name="predicate">条件の述語関数</param>
-        /// <param name="ng">条件を満たさない既知のindex</param>
-        /// <param name="ok">条件を満たす既知のindex</param>
-        /// <typeparam name="T">順序関係を持つ型(IComparableを実装する)</typeparam>
-        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearch<T> (this IList<T> list, Func<T, bool> predicate, int ng, int ok)
-        where T : IComparable<T> {
-            while (Abs (ok - ng) > 1) {
-                int mid = (ok + ng) / 2;
-                if (predicate (list[mid])) {
-                    ok = mid;
-                } else {
-                    ng = mid;
-                }
-            }
-            return ok;
         }
     }
 }
