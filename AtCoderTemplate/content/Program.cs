@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using static System.Math;
 using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyInputOutputs;
@@ -131,22 +132,23 @@ namespace AtCoderTemplate {
             }
         }
         // 最大公約数
-
         public static long GCD (long m, long n) {
             if (m < n) {
                 return GCD (n, m);
-            } else if (n == 0) {
-                return m;
-            } else {
-                return GCD (n, m % n);
             }
+            while (n != 0) {
+                var n2 = m % n;
+                m = n;
+                n = n2;
+            }
+            return m;
         }
         // 最小公倍数
         public static long LCM (long m, long n) {
             if (m < n) {
                 return LCM (n, m);
             } else {
-                return (m * n) / GCD (m, n);
+                return (long) (BigInteger.Multiply (m, n) / GCD (m, n));
             }
         }
     }
