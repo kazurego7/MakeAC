@@ -13,7 +13,7 @@ namespace AtCoderTemplate {
         public static void Main (string[] args) { }
     }
 
-    static class MyInputOutputs {
+    public static class MyInputOutputs {
         /* Input & Output*/
         public static int ReadInt () {
             return int.Parse (Console.ReadLine ());
@@ -100,7 +100,7 @@ namespace AtCoderTemplate {
         }
     }
 
-    static class MyNumericFunctions {
+    public static class MyNumericFunctions {
         public static bool isEven (int a) {
             return a % 2 == 0;
         }
@@ -133,9 +133,9 @@ namespace AtCoderTemplate {
         }
         // 最大公約数
         public static long GCD (long m, long n) {
-            if (m < n) {
-                return GCD (n, m);
-            }
+            if (m <= 0 || n <= 0) throw new ArgumentException ();
+
+            if (m < n) return GCD (n, m);
             while (n != 0) {
                 var n2 = m % n;
                 m = n;
@@ -145,15 +145,12 @@ namespace AtCoderTemplate {
         }
         // 最小公倍数
         public static long LCM (long m, long n) {
-            if (m < n) {
-                return LCM (n, m);
-            } else {
-                return (long) (BigInteger.Multiply (m, n) / GCD (m, n));
-            }
+            var ans = checked ((long) (BigInteger.Multiply (m, n) / GCD (m, n)));
+            return ans;
         }
     }
 
-    static class MyAlgorithm {
+    public static class MyAlgorithm {
         /// <summary>
         /// 二分探索法
         /// O(log N)
@@ -245,7 +242,7 @@ namespace AtCoderTemplate {
         }
     }
 
-    static class MyExtensions {
+    public static class MyExtensions {
         // AppendとPrependが、.NET Standard 1.6からの追加で、Mono 4.6.2 はそれに対応して仕様はあるが、実装がない
         public static IEnumerable<T> Append<T> (this IEnumerable<T> source, T element) {
             return source.Concat (Enumerable.Repeat (element, 1));
