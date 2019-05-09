@@ -4,6 +4,6 @@ pushd "%~dp0"
 if exist *.nupkg (
     del *.nupkg
     )
-nuget pack ./content/AtCoderContest.Template.CSharp.nuspec -Build -NoDefaultExcludes
+nuget pack ./AtCoderContest.Template.CSharp.nuspec -Build -NoDefaultExcludes
 dotnet new -i ./*.nupkg
 popd

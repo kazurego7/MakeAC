@@ -5851,8 +5851,8 @@
     },
     "AtCoderTemplate/1.0.0": {
       "type": "project",
-      "path": "../content/AtCoderTemplate.csproj",
-      "msbuildProject": "../content/AtCoderTemplate.csproj"
+      "path": "../AtCoderTemplate/content/AtCoderTemplate.csproj",
+      "msbuildProject": "../AtCoderTemplate/content/AtCoderTemplate.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -5872,11 +5872,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\WorkSpace\\Tools\\AtCoderTemplate\\test\\test.csproj",
-      "projectName": "test",
-      "projectPath": "D:\\WorkSpace\\Tools\\AtCoderTemplate\\test\\test.csproj",
+      "projectUniqueName": "D:\\WorkSpace\\Tools\\ACTempTest\\ACTempTest.csproj",
+      "projectName": "ACTempTest",
+      "projectPath": "D:\\WorkSpace\\Tools\\ACTempTest\\ACTempTest.csproj",
       "packagesPath": "C:\\Users\\kazuki_wada\\.nuget\\packages\\",
-      "outputPath": "D:\\WorkSpace\\Tools\\AtCoderTemplate\\test\\obj\\",
+      "outputPath": "D:\\WorkSpace\\Tools\\ACTempTest\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\ProgramData\\Xamarin\\NuGet\\",
