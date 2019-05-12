@@ -101,49 +101,100 @@ namespace AtCoderTemplate {
     }
 
     public static class MyNumericFunctions {
-        public static bool isEven (int a) {
+        public static bool IsEven (int a) {
             return a % 2 == 0;
         }
-        public static bool isEven (long a) {
+        public static bool IsEven (long a) {
             return a % 2 == 0;
         }
-        public static bool isOdd (int a) {
-            return !isEven (a);
+        public static bool IsOdd (int a) {
+            return !IsEven (a);
         }
-        public static bool isOdd (long a) {
-            return !isEven (a);
+        public static bool IsOdd (long a) {
+            return !IsEven (a);
+        }
+
+        /// <summary>
+        /// 順列の総数を得る
+        /// O(N-K)
+        /// </summary>
+        /// <param name="n">全体の数</param>
+        /// <param name="k">並べる数</param>
+        /// <param name="divisor">返り値がlongを超えないようにdivisorで割った余りを得る</param>
+        /// <returns>nPk (をdivisorで割った余り)</returns>
+        public static long nPk (int n, int k, long divisor) {
+            if (k > n) {
+                return 0L;
+            } else {
+                return Enumerable.Range (n - k + 1, k).Aggregate (1L, ((i, m) => (i * m) % divisor));
+            }
         }
 
         public static long nPk (int n, int k) {
             if (k > n) {
-                return 0;
+                return 0L;
             } else {
-                return Enumerable.Range (n - k + 1, k).Aggregate ((long) 1, ((i, m) => i * m));
+                return Enumerable.Range (n - k + 1, k).Aggregate (1L, ((i, m) => (i * m)));
             }
         }
+
+        /// <summary>
+        /// 階乗を得る
+        /// O(N)
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="divisor">返り値がlongを超えないようにdivisorで割った余りを得る</param>
+        /// <returns>n! (をdivisorで割った余り)</returns>
+        public static long Fact (int n, long divisor) {
+            return nPk (n, n, divisor);
+        }
+
         public static long Fact (int n) {
             return nPk (n, n);
         }
+
+        /// <summary>
+        /// 組み合わせの総数を得る
+        /// </summary>
+        /// <param name="n"></param>
+        /// <param name="k"></param>
+        /// <returns>nCk</returns>
         public static long nCk (int n, int k) {
             if (k > n) {
-                return 0;
+                return 0L;
             } else {
                 return nPk (n, k) / Fact (k);
             }
         }
-        // 最大公約数
+
+        /// <summary>
+        /// 最大公約数を得る 
+        /// O(log N)
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public static long GCD (long m, long n) {
-            if (m <= 0 || n <= 0) throw new ArgumentException ();
+            // GCD(m,n) = GCD(n, m%n)を利用
+            // m%n = 0のとき、mはnで割り切れるので、nが最大公約数
+            if (m <= 0L || n <= 0L) throw new ArgumentException ();
 
             if (m < n) return GCD (n, m);
-            while (n != 0) {
+            while (m % n != 0L) {
                 var n2 = m % n;
                 m = n;
                 n = n2;
             }
-            return m;
+            return n;
         }
-        // 最小公倍数
+
+        /// <summary>
+        /// 最小公倍数を得る
+        /// O(log N)
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public static long LCM (long m, long n) {
             var ans = checked ((long) (BigInteger.Multiply (m, n) / GCD (m, n)));
             return ans;
