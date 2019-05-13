@@ -1,0 +1,17 @@
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\xunit.runner.reporters.netcoreapp10.dll
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\xunit.runner.utility.netcoreapp10.dll
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\ACTempTest.deps.json
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\ACTempTest.runtimeconfig.json
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\ACTempTest.runtimeconfig.dev.json
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\ACTempTest.dll
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\ACTempTest.pdb
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\AtCoderTemplate.dll
+D:\WorkSpace\Tools\ACTempTest\bin\Debug\netcoreapp2.0\AtCoderTemplate.pdb
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.csprojAssemblyReference.cache
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.csproj.CoreCompileInputs.cache
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.AssemblyInfoInputs.cache
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.AssemblyInfo.cs
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.csproj.CopyComplete
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.dll
+D:\WorkSpace\Tools\ACTempTest\obj\Debug\netcoreapp2.0\ACTempTest.pdb
