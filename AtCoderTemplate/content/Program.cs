@@ -171,13 +171,13 @@ namespace AtCoderTemplate {
         /// 最大公約数を得る 
         /// O(log N)
         /// </summary>
-        /// <param name="m"></param>
-        /// <param name="n"></param>
+        /// <param name="m">自然数</param>
+        /// <param name="n">自然数</param>
         /// <returns></returns>
         public static long GCD (long m, long n) {
             // GCD(m,n) = GCD(n, m%n)を利用
             // m%n = 0のとき、mはnで割り切れるので、nが最大公約数
-            if (m <= 0L || n <= 0L) throw new ArgumentException ();
+            if (m <= 0L || n <= 0L) throw new ArgumentOutOfRangeException ();
 
             if (m < n) return GCD (n, m);
             while (m % n != 0L) {
@@ -198,6 +198,32 @@ namespace AtCoderTemplate {
         public static long LCM (long m, long n) {
             var ans = checked ((long) (BigInteger.Multiply (m, n) / GCD (m, n)));
             return ans;
+        }
+
+        /// <summary>
+        /// 約数列挙(非順序)
+        /// O(√N)
+        /// </summary>
+        /// <param name="m">m != 0</param>
+        /// <returns></returns>
+        public static IEnumerable<long> Divisor (long m) {
+            if (m == 0) throw new ArgumentOutOfRangeException ();
+            var front = Enumerable.Range (1, (int) Sqrt (m))
+                .Select (i => (long) i)
+                .Where (d => m % d == 0);
+            return front.Concat (front.Where (x => x * x != m).Select (x => m / x));
+        }
+
+        /// <summary>
+        /// 公約数列挙(非順序)
+        /// O(√N)
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static IEnumerable<long> CommonDivisor (long m, long n) {
+            if (m < n) return CommonDivisor (n, m);
+            return Divisor (m).Where (md => n % md == 0);
         }
     }
 

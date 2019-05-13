@@ -7,11 +7,11 @@ namespace MyNumericFunctions.Test {
     public class nPk {
         const long bigdiv = 1000000007L;
         [Theory]
-        [InlineData (7, 3, 20, (7 * 6 * 5) % 20)] // 普通の値
-        [InlineData (12, 4, 3, (12 * 11 * 10 * 9) % 3)]
+        [InlineData ((7 * 6 * 5) % 20, 7, 3, 20)] // 普通の値
+        [InlineData ((12 * 11 * 10 * 9) % 3, 12, 4, 3)]
         // [InlineData ()]
-        public void Value (int n, int k, long divisor, long ans) {
-            Assert.Equal (nPk (n, k, divisor), ans);
+        public void Value (long expected, int n, int k, long divisor) {
+            Assert.Equal (expected, nPk (n, k, divisor));
         }
 
         // public void Exception () {

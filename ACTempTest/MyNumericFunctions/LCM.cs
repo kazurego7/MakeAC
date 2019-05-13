@@ -6,10 +6,10 @@ using static AtCoderTemplate.MyNumericFunctions;
 namespace MyNumericFunctions.Test {
     public class LCM {
         [Theory]
-        [InlineData (4, 6, 12)] // 普通の合成数
-        [InlineData (3 * 7, 11 * 2, 3 * 7 * 11 * 2)] // 互いに素
-        public void Value (long m, long n, long ans) {
-            Assert.Equal (LCM (m, n), ans);
+        [InlineData (12, 4, 6)] // 普通の合成数
+        [InlineData (3 * 7 * 11 * 2, 3 * 7, 11 * 2)] // 互いに素
+        public void Value (long expected, long m, long n) {
+            Assert.Equal (expected, LCM (m, n));
         }
 
         [Theory]
