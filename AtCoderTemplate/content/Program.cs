@@ -204,7 +204,7 @@ namespace AtCoderTemplate {
         /// 約数列挙(非順序)
         /// O(√N)
         /// </summary>
-        /// <param name="m">m != 0</param>
+        /// <param name="m">m > 0</param>
         /// <returns></returns>
         public static IEnumerable<long> Divisor (long m) {
             if (m == 0) throw new ArgumentOutOfRangeException ();
@@ -218,8 +218,8 @@ namespace AtCoderTemplate {
         /// 公約数列挙(非順序)
         /// O(√N)
         /// </summary>
-        /// <param name="m"></param>
-        /// <param name="n"></param>
+        /// <param name="m">m > 0</param>
+        /// <param name="n">n > 0</param>
         /// <returns></returns>
         public static IEnumerable<long> CommonDivisor (long m, long n) {
             if (m < n) return CommonDivisor (n, m);

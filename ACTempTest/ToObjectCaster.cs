@@ -1,25 +1,31 @@
 using System;
 
-public static class ToObjectCaster<Expected, Arg1> {
-    public static Func<Expected, Arg1, object[]> MakeCast () {
-        return (Expected exp, Arg1 a1) => new object[] { exp, a1 };
+public static class ToObjectCaster<T1> {
+    public static Func<T1, object[]> MakeCast () {
+        return (T1 p1) => new object[] { p1 };
     }
 }
 
-public static class ToObjectCaster<Expected, Arg1, Arg2> {
-    public static Func<Expected, Arg1, Arg2, object[]> MakeCast () {
-        return (Expected exp, Arg1 a1, Arg2 a2) => new object[] { exp, a1, a2 };
+public static class ToObjectCaster<T1, T2> {
+    public static Func<T1, T2, object[]> MakeCast () {
+        return (T1 p1, T2 p2) => new object[] { p1, p2 };
     }
 }
 
-public static class ToObjectCaster<Expected, Arg1, Arg2, Arg3> {
-    public static Func<Expected, Arg1, Arg2, Arg3, object[]> MakeCast () {
-        return (Expected exp, Arg1 a1, Arg2 a2, Arg3 a3) => new object[] { exp, a1, a2, a3 };
+public static class ToObjectCaster<T1, T2, T3> {
+    public static Func<T1, T2, T3, object[]> MakeCast () {
+        return (T1 p1, T2 p2, T3 p3) => new object[] { p1, p2, p3 };
     }
 }
 
-public static class ToObjectCaster<Expected, Arg1, Arg2, Arg3, Arg4> {
-    public static Func<Expected, Arg1, Arg2, Arg3, Arg4, object[]> MakeCast () {
-        return (Expected exp, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4) => new object[] { exp, a1, a2, a3, a4 };
+public static class ToObjectCaster<T1, T2, T3, T4> {
+    public static Func<T1, T2, T3, T4, object[]> MakeCast () {
+        return (T1 p1, T2 p2, T3 p3, T4 p4) => new object[] { p1, p2, p3, p4 };
+    }
+}
+
+public static class ToObjectCaster<T1, T2, T3, T4, T5> {
+    public static Func<T1, T2, T3, T4, T5, object[]> MakeCast () {
+        return (T1 p1, T2 p2, T3 p3, T4 p4, T5 a4) => new object[] { p1, p2, p3, p4, a4 };
     }
 }
