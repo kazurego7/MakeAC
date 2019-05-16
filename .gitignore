@@ -13,3 +13,14 @@
 .history
 
 # End of https://www.gitignore.io/api/visualstudiocode
+
+
+# MySetting
+
+### C#
+
+/ACTempTest/obj
+/ACTempTest/bin
+
+/AtCoderTemplate/content/bin
+/AtCoderTemplate/content/obj
