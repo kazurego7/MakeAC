@@ -5,3 +5,4 @@ using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyInputOutputs;
 using static AtCoderTemplate.MyNumericFunctions;
 using static AtCoderTemplate.MyAlgorithm;
+using static AtCoderTemplate.MyConstants;

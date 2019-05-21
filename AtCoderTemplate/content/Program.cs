@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using static System.Math;
-using static AtCoderTemplate.MyExtensions;
+using static AtCoderTemplate.MyConstants;
 using static AtCoderTemplate.MyInputOutputs;
 using static AtCoderTemplate.MyNumericFunctions;
 using static AtCoderTemplate.MyAlgorithm;
+using static AtCoderTemplate.MyExtensions;
 
 namespace AtCoderTemplate {
     public class Program {
@@ -97,6 +98,15 @@ namespace AtCoderTemplate {
             foreach (var row in sources) {
                 PrintRow (row);
             }
+        }
+    }
+
+    public static class MyConstants {
+        public static List<char> LowerAlphabets () {
+            return Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i).ToList ();
+        }
+        public static List<char> UpperAlphabets () {
+            return Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i).ToList ();
         }
     }
 
