@@ -7,13 +7,13 @@ namespace Hoges.Test {
     public class FugaClass {
         // // 値のテスト用のデータ作成メソッド
         // public static IEnumerable<object[]> GetValueData () {
-        //     var ToObj = ToObjectCaster<>.MakeCast ();
-        //     return new List<object[]> {
-        //         ToObj(),
+        //     return new TheoryData<T> {
+        //         // 普通のテスト
+        //         {},
         //     };
         // }
 
-        // // // 値のテスト
+        // // 値のテスト
         // [Theory]
         // [MemberData(nameof(GetValueData))]
         // public void Value () {
@@ -22,9 +22,9 @@ namespace Hoges.Test {
 
         // // 例外のテスト用のデータ作成メソッド
         // public static IEnumerable<object[]> GetExceptionData () {
-        //     var ToObj = ToObjectCaster<>.MakeCast ();
-        //     return new List<object[]> {
-        //         ToObj(),
+        //     return new TheoryData<T> {
+        //         // 普通のテスト
+        //         {},
         //     };
         // }
 
