@@ -16,47 +16,81 @@ namespace AtCoderTemplate {
 
     public static class MyInputOutputs {
         /* Input & Output*/
+        public static string Read () {
+            return Console.ReadLine ();
+        }
+
+        public static List<string> Reads () {
+            return Console.ReadLine ().Split (' ').ToList ();
+        }
+
+        public static List<List<string>> ReadRows (int n) {
+            /*
+            入力例
+            A1 B1 C1 ... Z1
+            A2 B2 C2 ... Z2
+            ...
+            An Bn Cn ... Zn
+           
+
+            出力例
+            [[A1, B1, C1, ... Z1], [A2, B2, C2, ... Z2], ... [An, Bn, Cn, ... Zn]]
+            */
+            return Enumerable.Range (0, n).Select (i => Reads ()).ToList ();
+        }
+
+        public static List<List<string>> ReadColumns (int n) {
+            /*
+            入力例
+            A1 B1 C1 ... Z1
+            A2 B2 C2 ... Z2
+            ...
+            An Bn Cn ... Zn
+           
+
+            出力例
+            [[A1, A2, A3, ... An], [B1, B2, B3, ... Bn], ... [Z1, Z2, Z3, ... Zn]]
+            */
+            var rows = ReadRows (n);
+            var m = rows.IsEmpty () ? 0 : rows[0].Count;
+            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i].ToString ()).ToList ()).ToList ();
+        }
+
+        public static int ToInt (this string str) {
+            return int.Parse (str);
+        }
+
+        public static long ToLong (this string str) {
+            return long.Parse (str);
+        }
+
+        public static List<int> ToInts (this IList<string> strs) {
+            return strs.Select (str => str.ToInt ()).ToList ();
+        }
+
+        public static List<long> ToLongs (this IList<string> strs) {
+            return strs.Select (str => str.ToLong ()).ToList ();
+        }
+
         public static int ReadInt () {
-            return int.Parse (Console.ReadLine ());
+            return Read ().ToInt ();
         }
         public static long ReadLong () {
-            return long.Parse (Console.ReadLine ());
+            return Read ().ToLong ();
         }
+
         public static List<int> ReadInts () {
-            return Console.ReadLine ().Split (' ').Select (c => int.Parse (c)).ToList ();
+            return Reads ().ToInts ();
         }
         public static List<long> ReadLongs () {
-            return Console.ReadLine ().Split (' ').Select (c => long.Parse (c)).ToList ();
+            return Reads ().ToLongs ();
         }
-        public static List<List<int>> ReadIntColumns (int n) {
-            /*
-            入力例
-            A1 B1
-            A2 B2
-            ...
-            An Bn
 
-            出力例
-            [[A1,A2,...,An], [B1,B2,...,Bn]]
-            */
-            var rows = Enumerable.Range (0, n).Select (i => ReadInts ()).ToList ();
-            var m = rows.FirstOrDefault ()?.Count () ?? 0;
-            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i]).ToList ()).ToList ();
+        public static List<List<int>> ReadIntColumns (int n) {
+            return ReadColumns (n).Select (column => column.ToInts ()).ToList ();
         }
         public static List<List<long>> ReadLongColumns (int n) {
-            /*
-            入力例
-            A1 B1
-            A2 B2
-            ...
-            An Bn
-
-            出力例
-            [[A1,A2,...,An], [B1,B2,...,Bn]]
-            */
-            var rows = Enumerable.Range (0, n).Select (i => ReadLongs ()).ToList ();
-            var m = rows.FirstOrDefault ()?.Count () ?? 0;
-            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i]).ToList ()).ToList ();
+            return ReadColumns (n).Select (column => column.ToLongs ()).ToList ();
         }
 
         public static void Print<T> (T item) {
@@ -94,7 +128,7 @@ namespace AtCoderTemplate {
                 Console.WriteLine (item);
             }
         }
-        public static void Print2DArray<T> (IEnumerable<IEnumerable<T>> sources) {
+        public static void PrintRows<T> (IEnumerable<IEnumerable<T>> sources) {
             foreach (var row in sources) {
                 PrintRow (row);
             }
