@@ -410,6 +410,13 @@ namespace AtCoderTemplate {
             return source.Take (i).Concat (inserted).Concat (source.Skip (i));
         }
 
+        public static IEnumerable<T> Do<T> (this IEnumerable<T> source, Action<T> action) {
+            foreach (var item in source) {
+                action (item);
+            }
+            return source;
+        }
+
         /// <summary>
         /// 順列を得る
         /// O(N!)
