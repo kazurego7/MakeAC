@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
 using static System.Math;
@@ -20,11 +21,11 @@ namespace AtCoderTemplate {
             return Console.ReadLine ();
         }
 
-        public static List<string> Reads () {
-            return Console.ReadLine ().Split (' ').ToList ();
+        public static ImmutableList<string> Reads () {
+            return Console.ReadLine ().Split (' ').ToImmutableList ();
         }
 
-        public static List<List<string>> ReadRows (int n) {
+        public static ImmutableList<ImmutableList<string>> ReadRows (int n) {
             /*
             入力例
             A1 B1 C1 ... Z1
@@ -36,10 +37,10 @@ namespace AtCoderTemplate {
             出力例
             [[A1, B1, C1, ... Z1], [A2, B2, C2, ... Z2], ... [An, Bn, Cn, ... Zn]]
             */
-            return Enumerable.Range (0, n).Select (i => Reads ()).ToList ();
+            return Enumerable.Range (0, n).Select (i => Reads ()).ToImmutableList ();
         }
 
-        public static List<List<string>> ReadColumns (int n) {
+        public static ImmutableList<ImmutableList<string>> ReadColumns (int n) {
             /*
             入力例
             A1 B1 C1 ... Z1
@@ -53,7 +54,7 @@ namespace AtCoderTemplate {
             */
             var rows = ReadRows (n);
             var m = rows.IsEmpty () ? 0 : rows[0].Count;
-            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i].ToString ()).ToList ()).ToList ();
+            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i].ToString ()).ToImmutableList ()).ToImmutableList ();
         }
 
         public static int ToInt (this string str) {
@@ -64,12 +65,12 @@ namespace AtCoderTemplate {
             return long.Parse (str);
         }
 
-        public static List<int> ToInts (this IList<string> strs) {
-            return strs.Select (str => str.ToInt ()).ToList ();
+        public static ImmutableList<int> ToInts (this IImmutableList<string> strs) {
+            return strs.Select (str => str.ToInt ()).ToImmutableList ();
         }
 
-        public static List<long> ToLongs (this IList<string> strs) {
-            return strs.Select (str => str.ToLong ()).ToList ();
+        public static ImmutableList<long> ToLongs (this IImmutableList<string> strs) {
+            return strs.Select (str => str.ToLong ()).ToImmutableList ();
         }
 
         public static int ReadInt () {
@@ -79,18 +80,18 @@ namespace AtCoderTemplate {
             return Read ().ToLong ();
         }
 
-        public static List<int> ReadInts () {
+        public static ImmutableList<int> ReadInts () {
             return Reads ().ToInts ();
         }
-        public static List<long> ReadLongs () {
+        public static ImmutableList<long> ReadLongs () {
             return Reads ().ToLongs ();
         }
 
-        public static List<List<int>> ReadIntColumns (int n) {
-            return ReadColumns (n).Select (column => column.ToInts ()).ToList ();
+        public static ImmutableList<ImmutableList<int>> ReadIntColumns (int n) {
+            return ReadColumns (n).Select (column => column.ToInts ()).ToImmutableList ();
         }
-        public static List<List<long>> ReadLongColumns (int n) {
-            return ReadColumns (n).Select (column => column.ToLongs ()).ToList ();
+        public static ImmutableList<ImmutableList<long>> ReadLongColumns (int n) {
+            return ReadColumns (n).Select (column => column.ToLongs ()).ToImmutableList ();
         }
 
         public static void Print<T> (T item) {
@@ -136,11 +137,11 @@ namespace AtCoderTemplate {
     }
 
     public static class MyConstants {
-        public static List<char> LowerAlphabets () {
-            return Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i).ToList ();
+        public static ImmutableList<char> LowerAlphabets () {
+            return Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i).ToImmutableList ();
         }
-        public static List<char> UpperAlphabets () {
-            return Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i).ToList ();
+        public static ImmutableList<char> UpperAlphabets () {
+            return Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i).ToImmutableList ();
         }
     }
 
@@ -251,9 +252,18 @@ namespace AtCoderTemplate {
         /// <param name="m">m > 0</param>
         /// <returns></returns>
         public static IEnumerable<long> Divisor (long m) {
-            if (m == 0) throw new ArgumentOutOfRangeException ();
+            if (!(m > 0)) throw new ArgumentOutOfRangeException ();
+
             var front = Enumerable.Range (1, (int) Sqrt (m))
                 .Select (i => (long) i)
+                .Where (d => m % d == 0);
+            return front.Concat (front.Where (x => x * x != m).Select (x => m / x));
+        }
+
+        public static IEnumerable<int> Divisor (int m) {
+            if (!(m > 0)) throw new ArgumentOutOfRangeException ();
+
+            var front = Enumerable.Range (1, (int) Sqrt (m))
                 .Where (d => m % d == 0);
             return front.Concat (front.Where (x => x * x != m).Select (x => m / x));
         }
@@ -263,27 +273,67 @@ namespace AtCoderTemplate {
         /// O(√N)
         /// </summary>
         /// <param name="m">m > 0</param>
-        /// <param name="n">n > 0</param>
+        /// <param name="n">n > 0 </param>
         /// <returns></returns>
         public static IEnumerable<long> CommonDivisor (long m, long n) {
+            if (!(m > 0)) throw new ArgumentOutOfRangeException ();
+
             if (m < n) return CommonDivisor (n, m);
             return Divisor (m).Where (md => n % md == 0);
+        }
+
+        public static IEnumerable<int> CommonDivisor (int m, int n) {
+            if (!(m > 0)) throw new ArgumentOutOfRangeException ();
+
+            if (m < n) return CommonDivisor (n, m);
+            return Divisor (m).Where (md => n % md == 0);
+        }
+
+        /// <summary>
+        /// nまでの素数を得る
+        /// </summary>
+        /// <param name="n">n > 1</param>
+        /// <returns></returns>
+        public static IEnumerable<int> Prime (int n) {
+            if (!(n > 1)) throw new ArgumentOutOfRangeException ();
+
+            var primes = new List<int> ();
+            foreach (var i in Enumerable.Range (2, n - 1)) {
+                if (primes.All (p => i % p != 0)) {
+                    primes.Add (i);
+                }
+            }
+            return primes;
+        }
+
+        /// <summary>
+        /// 順列を得る
+        /// O(N!)
+        /// </summary>
+        public static IEnumerable<IEnumerable<T>> Perm<T> (IEnumerable<T> source, int n) {
+            if (n == 0 || source.IsEmpty () || source.Count () < n) {
+                return Enumerable.Empty<IEnumerable<T>> ();
+            } else if (n == 1) {
+                return source.Select (i => ImmutableList.Create (i));
+            } else {
+                var nexts = source.Select ((x, i) =>
+                    new { next = source.Take (i).Concat (source.Skip (i + 1)), selected = source.Take (i + 1).Last () });
+                return nexts.SelectMany (next => Perm (next.next, n - 1).Select (item => item.Prepend (next.selected)));
+            }
         }
     }
 
     public static class MyAlgorithm {
         /// <summary>
-        /// 二分探索法
+        /// めぐる式二分探索法
         /// O(log N)
         /// </summary>
         /// <param name="list">探索するリスト</param>
         /// <param name="predicate">条件の述語関数</param>
         /// <param name="ng">条件を満たさない既知のindex</param>
         /// <param name="ok">条件を満たす既知のindex</param>
-        /// <typeparam name="T">順序関係を持つ型(IComparableを実装する)</typeparam>
         /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearch<T> (IList<T> list, Func<T, bool> predicate, int ng, int ok)
-        where T : IComparable<T> {
+        public static int BinarySearch<T> (IList<T> list, Func<T, bool> predicate, int ng, int ok) {
             while (Abs (ok - ng) > 1) {
                 int mid = (ok + ng) / 2;
                 if (predicate (list[mid])) {
@@ -296,50 +346,96 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// 辺の集まりを操作するオブジェクト
+        /// 二分探索法
         /// </summary>
-        public class Edge {
-            long[, ] edge;
+        /// <param name="list">条件の境界に対し、条件を満たすindexが左にあるリスト</param>
+        /// <param name="predicate">条件の述語関数</param>
+        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
+        public static int BinarySearchLeft<T> (IList<T> list, Func<T, bool> predicate) {
+            return BinarySearch (list, predicate, list.Count, -1);
+        }
+
+        /// <summary>
+        /// 二分探索法
+        /// </summary>
+        /// <param name="list">条件の境界に対し、条件を満たすindexが右にあるリスト</param>
+        /// <param name="predicate">条件の述語関数</param>
+        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
+        public static int BinarySearchRight<T> (IList<T> list, Func<T, bool> predicate) {
+            return BinarySearch (list, predicate, -1, list.Count);
+        }
+
+        public struct WeightEdge {
+            int SourceNode { get; }
+            int TargetNode { get; }
+            long Weight { get; }
+
+            public WeightEdge (int sourceNode, int targetNode, long weight) {
+                SourceNode = sourceNode;
+                TargetNode = targetNode;
+                Weight = weight;
+            }
+        }
+
+        public static IList<WeightEdge> ToWeightEdges (IList<int> sourceNodes, IList<int> targetNodes, IList<long> weights) {
+            return Enumerable.Range (0, sourceNodes.Count)
+                .Select (i => new WeightEdge (sourceNode: sourceNodes[i], targetNode: targetNodes[i], weight: weights[i]))
+                .ToList ();
+        }
+
+        /// <summary>
+        /// 重み付きグラフ
+        /// </summary>
+        public class WeightGraph {
+            long[, ] adjacencyMatrix;
             public int NodeNum { get; }
-            public Edge (int nodeNum, long overDistance) {
-                var edge = new long[nodeNum, nodeNum];
+            public WeightGraph (int nodeNum, long weightOfNoEdge) {
+                var adjacencyMatrix = new long[nodeNum, nodeNum];
                 foreach (var i in Enumerable.Range (0, nodeNum)) {
                     foreach (var j in Enumerable.Range (0, nodeNum)) {
                         if (i != j) {
-                            edge[i, j] = overDistance;
+                            adjacencyMatrix[i, j] = weightOfNoEdge;
                         } else {
-                            edge[i, j] = 0;
+                            adjacencyMatrix[i, j] = 0;
                         }
                     }
                 }
 
-                this.edge = edge;
+                this.adjacencyMatrix = adjacencyMatrix;
                 this.NodeNum = nodeNum;
             }
-            public Edge (Edge edge) {
-                this.edge = new long[edge.NodeNum, edge.NodeNum];
-                foreach (var i in Enumerable.Range (0, edge.NodeNum)) {
-                    foreach (var j in Enumerable.Range (0, edge.NodeNum)) {
-                        this.edge[i, j] = edge.GetLength (i, j);
+
+            public WeightGraph (IList<WeightEdge> edges, int nodeNum, long weightOfNoEdge) {
+                var adjacencyMatrix = new long[nodeNum, nodeNum];
+                foreach (var edge in edges) {
+
+                }
+            }
+
+            public WeightGraph (WeightGraph graph) {
+                this.adjacencyMatrix = new long[graph.NodeNum, graph.NodeNum];
+                foreach (var i in Enumerable.Range (0, graph.NodeNum)) {
+                    foreach (var j in Enumerable.Range (0, graph.NodeNum)) {
+                        this.adjacencyMatrix[i, j] = graph.GetLength (i, j);
                     }
                 }
-                this.NodeNum = edge.NodeNum;
+                this.NodeNum = graph.NodeNum;
             }
 
             public List<List<long>> ToList () {
                 return Enumerable.Range (0, NodeNum).Select (i =>
                     Enumerable.Range (0, NodeNum).Select (j =>
-                        edge[i, j]
+                        adjacencyMatrix[i, j]
                     ).ToList ()
                 ).ToList ();
             }
 
             public void Add (int node1, int node2, long distance) {
-                edge[node1, node2] = distance;
+                adjacencyMatrix[node1, node2] = distance;
             }
 
             public long GetLength (int node1, int node2) {
-                return edge[node1, node2];
+                return adjacencyMatrix[node1, node2];
             }
         }
 
@@ -350,8 +446,8 @@ namespace AtCoderTemplate {
         /// <param name="edge">Edgeオブジェクト</param>
         /// <param name="nodeNum">ノードの数</param>
         /// <returns>各ノード間の最短距離を辺として持つEdgeオブジェクト</returns>
-        public static Edge WarshallFloyd (Edge edge) {
-            var res = new Edge (edge);
+        public static WeightGraph WarshallFloyd (WeightGraph edge) {
+            var res = new WeightGraph (edge);
             foreach (var b in Enumerable.Range (0, edge.NodeNum)) {
                 foreach (var a in Enumerable.Range (0, edge.NodeNum)) {
                     foreach (var c in Enumerable.Range (0, edge.NodeNum)) {
@@ -386,30 +482,6 @@ namespace AtCoderTemplate {
             return !source.Any ();
         }
 
-        /// <summary>
-        /// インデックスiの位置の要素からk個取り除く
-        /// O(N)
-        /// </summary>
-        public static IEnumerable<T> TakeAwayRange<T> (this IEnumerable<T> source, int i, int count) {
-            return source.Take (i).Concat (source.Skip (i + count));
-        }
-
-        /// <summary>
-        /// インデックスiの位置の要素を取り除く
-        /// O(N)
-        /// </summary>
-        public static IEnumerable<T> TakeAwayAt<T> (this IEnumerable<T> source, int i) {
-            return source.TakeAwayRange (i, 1);
-        }
-
-        /// <summary>
-        /// インデックスiの位置にシーケンスを挿入する
-        /// O(N + K)
-        /// </summary>
-        public static IEnumerable<T> InsertEnumAt<T> (this IEnumerable<T> source, int i, IEnumerable<T> inserted) {
-            return source.Take (i).Concat (inserted).Concat (source.Skip (i));
-        }
-
         public static IEnumerable<T> Do<T> (this IEnumerable<T> source, Action<T> action) {
             foreach (var item in source) {
                 action (item);
@@ -417,20 +489,8 @@ namespace AtCoderTemplate {
             return source;
         }
 
-        /// <summary>
-        /// 順列を得る
-        /// O(N!)
-        /// </summary>
-        public static IEnumerable<IEnumerable<T>> Perm<T> (this IEnumerable<T> source, int n) {
-            if (n == 0 || source.IsEmpty () || source.Count () < n) {
-                return Enumerable.Empty<IEnumerable<T>> ();
-            } else if (n == 1) {
-                return source.Select (i => new List<T> { i });
-            } else {
-                var nexts = source.Select ((x, i) =>
-                    new { next = source.Take (i).Concat (source.Skip (i + 1)), selected = source.Take (i + 1).Last () });
-                return nexts.SelectMany (next => Perm (next.next, n - 1).Select (item => item.Prepend (next.selected)));
-            }
+        public static TR Pipe<T, TR> (this T arg, Func<T, TR> func) {
+            return func (arg);
         }
 
         /// <summary>
@@ -477,17 +537,6 @@ namespace AtCoderTemplate {
                 result.Add (func (result[i - 1], list[i]));
             }
             return result;
-        }
-
-        /// <summary>
-        /// 昇順にソートしたインデックスを得る
-        /// </summary>
-        /// <para>O(N * log N)</para>
-        public static IEnumerable<int> SortIndex<T> (this IEnumerable<T> source) {
-            return source
-                .Select ((item, i) => new { Item = item, Index = i })
-                .OrderBy (x => x.Item)
-                .Select (x => x.Index);
         }
     }
 }
