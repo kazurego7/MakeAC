@@ -443,14 +443,14 @@ namespace AtCoderTemplate {
         /// ワーシャルフロイド法
         /// O(N^3)
         /// </summary>
-        /// <param name="edge">Edgeオブジェクト</param>
+        /// <param name="graph">グラフ</param>
         /// <param name="nodeNum">ノードの数</param>
-        /// <returns>各ノード間の最短距離を辺として持つEdgeオブジェクト</returns>
-        public static WeightGraph WarshallFloyd (WeightGraph edge) {
-            var res = new WeightGraph (edge);
-            foreach (var b in Enumerable.Range (0, edge.NodeNum)) {
-                foreach (var a in Enumerable.Range (0, edge.NodeNum)) {
-                    foreach (var c in Enumerable.Range (0, edge.NodeNum)) {
+        /// <returns>各ノード間の最短距離を辺として持つグラフ</returns>
+        public static WeightGraph WarshallFloyd (WeightGraph graph) {
+            var res = new WeightGraph (graph);
+            foreach (var b in Enumerable.Range (0, graph.NodeNum)) {
+                foreach (var a in Enumerable.Range (0, graph.NodeNum)) {
+                    foreach (var c in Enumerable.Range (0, graph.NodeNum)) {
                         res.Add (a, c, Min (res.GetLength (a, c), res.GetLength (a, b) + res.GetLength (b, c)));
                     }
                 }
