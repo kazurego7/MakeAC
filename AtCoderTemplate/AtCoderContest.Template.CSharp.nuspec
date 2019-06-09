@@ -2,11 +2,11 @@
 <package>
   <metadata>
     <id>AtCoderContest.Template.CSharp</id>
-    <version>1.16.1</version>
+    <version>1.16.2</version>
     <description>
       AtCoder Contest Template
     </description>
-    <authors>Kazuki Wada</authors>
+    <authors>kazurego7</authors>
     <packageTypes>
       <packageType name="Template" />
     </packageTypes>

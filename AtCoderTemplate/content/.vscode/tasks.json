@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/ACTempTest.csproj"
+                "${workspaceFolder}/AtCoderTemplate.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/ACTempTest.csproj"
+                "${workspaceFolder}/AtCoderTemplate.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,7 +28,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/ACTempTest.csproj"
+                "${workspaceFolder}/AtCoderTemplate.csproj"
             ],
             "problemMatcher": "$tsc"
         }

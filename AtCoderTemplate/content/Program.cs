@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Numerics;
 using static System.Math;
@@ -21,11 +20,11 @@ namespace AtCoderTemplate {
             return Console.ReadLine ();
         }
 
-        public static ImmutableList<string> Reads () {
-            return Console.ReadLine ().Split (' ').ToImmutableList ();
+        public static List<string> Reads () {
+            return Console.ReadLine ().Split (' ').ToList ();
         }
 
-        public static ImmutableList<ImmutableList<string>> ReadRows (int n) {
+        public static List<List<string>> ReadRows (int n) {
             /*
             入力例
             A1 B1 C1 ... Z1
@@ -37,10 +36,10 @@ namespace AtCoderTemplate {
             出力例
             [[A1, B1, C1, ... Z1], [A2, B2, C2, ... Z2], ... [An, Bn, Cn, ... Zn]]
             */
-            return Enumerable.Range (0, n).Select (i => Reads ()).ToImmutableList ();
+            return Enumerable.Range (0, n).Select (i => Reads ()).ToList ();
         }
 
-        public static ImmutableList<ImmutableList<string>> ReadColumns (int n) {
+        public static List<List<string>> ReadColumns (int n) {
             /*
             入力例
             A1 B1 C1 ... Z1
@@ -54,7 +53,7 @@ namespace AtCoderTemplate {
             */
             var rows = ReadRows (n);
             var m = rows.IsEmpty () ? 0 : rows[0].Count;
-            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i].ToString ()).ToImmutableList ()).ToImmutableList ();
+            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i].ToString ()).ToList ()).ToList ();
         }
 
         public static int ToInt (this string str) {
@@ -65,12 +64,12 @@ namespace AtCoderTemplate {
             return long.Parse (str);
         }
 
-        public static ImmutableList<int> ToInts (this IImmutableList<string> strs) {
-            return strs.Select (str => str.ToInt ()).ToImmutableList ();
+        public static List<int> ToInts (this List<string> strs) {
+            return strs.Select (str => str.ToInt ()).ToList ();
         }
 
-        public static ImmutableList<long> ToLongs (this IImmutableList<string> strs) {
-            return strs.Select (str => str.ToLong ()).ToImmutableList ();
+        public static List<long> ToLongs (this List<string> strs) {
+            return strs.Select (str => str.ToLong ()).ToList ();
         }
 
         public static int ReadInt () {
@@ -80,18 +79,18 @@ namespace AtCoderTemplate {
             return Read ().ToLong ();
         }
 
-        public static ImmutableList<int> ReadInts () {
+        public static List<int> ReadInts () {
             return Reads ().ToInts ();
         }
-        public static ImmutableList<long> ReadLongs () {
+        public static List<long> ReadLongs () {
             return Reads ().ToLongs ();
         }
 
-        public static ImmutableList<ImmutableList<int>> ReadIntColumns (int n) {
-            return ReadColumns (n).Select (column => column.ToInts ()).ToImmutableList ();
+        public static List<List<int>> ReadIntColumns (int n) {
+            return ReadColumns (n).Select (column => column.ToInts ()).ToList ();
         }
-        public static ImmutableList<ImmutableList<long>> ReadLongColumns (int n) {
-            return ReadColumns (n).Select (column => column.ToLongs ()).ToImmutableList ();
+        public static List<List<long>> ReadLongColumns (int n) {
+            return ReadColumns (n).Select (column => column.ToLongs ()).ToList ();
         }
 
         public static void Print<T> (T item) {
@@ -137,11 +136,11 @@ namespace AtCoderTemplate {
     }
 
     public static class MyConstants {
-        public static ImmutableList<char> LowerAlphabets () {
-            return Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i).ToImmutableList ();
+        public static List<char> LowerAlphabets () {
+            return Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i).ToList ();
         }
-        public static ImmutableList<char> UpperAlphabets () {
-            return Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i).ToImmutableList ();
+        public static List<char> UpperAlphabets () {
+            return Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i).ToList ();
         }
     }
 
@@ -314,7 +313,7 @@ namespace AtCoderTemplate {
             if (n == 0 || source.IsEmpty () || source.Count () < n) {
                 return Enumerable.Empty<IEnumerable<T>> ();
             } else if (n == 1) {
-                return source.Select (i => ImmutableList.Create (i));
+                return source.Select (i => new List<T> { i });
             } else {
                 var nexts = source.Select ((x, i) =>
                     new { next = source.Take (i).Concat (source.Skip (i + 1)), selected = source.Take (i + 1).Last () });
@@ -333,7 +332,7 @@ namespace AtCoderTemplate {
         /// <param name="ng">条件を満たさない既知のindex</param>
         /// <param name="ok">条件を満たす既知のindex</param>
         /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearch<T> (IList<T> list, Func<T, bool> predicate, int ng, int ok) {
+        public static int BinarySearch<T> (List<T> list, Func<T, bool> predicate, int ng, int ok) {
             while (Abs (ok - ng) > 1) {
                 int mid = (ok + ng) / 2;
                 if (predicate (list[mid])) {
@@ -351,7 +350,7 @@ namespace AtCoderTemplate {
         /// <param name="list">条件の境界に対し、条件を満たすindexが左にあるリスト</param>
         /// <param name="predicate">条件の述語関数</param>
         /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearchLeft<T> (IList<T> list, Func<T, bool> predicate) {
+        public static int BinarySearchLeft<T> (List<T> list, Func<T, bool> predicate) {
             return BinarySearch (list, predicate, list.Count, -1);
         }
 
@@ -361,7 +360,7 @@ namespace AtCoderTemplate {
         /// <param name="list">条件の境界に対し、条件を満たすindexが右にあるリスト</param>
         /// <param name="predicate">条件の述語関数</param>
         /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearchRight<T> (IList<T> list, Func<T, bool> predicate) {
+        public static int BinarySearchRight<T> (List<T> list, Func<T, bool> predicate) {
             return BinarySearch (list, predicate, -1, list.Count);
         }
 
@@ -377,7 +376,7 @@ namespace AtCoderTemplate {
             }
         }
 
-        public static IList<WeightEdge> ToWeightEdges (IList<int> sourceNodes, IList<int> targetNodes, IList<long> weights) {
+        public static List<WeightEdge> ToWeightEdges (List<int> sourceNodes, List<int> targetNodes, List<long> weights) {
             return Enumerable.Range (0, sourceNodes.Count)
                 .Select (i => new WeightEdge (sourceNode: sourceNodes[i], targetNode: targetNodes[i], weight: weights[i]))
                 .ToList ();
@@ -405,7 +404,7 @@ namespace AtCoderTemplate {
                 this.NodeNum = nodeNum;
             }
 
-            public WeightGraph (IList<WeightEdge> edges, int nodeNum, long weightOfNoEdge) {
+            public WeightGraph (List<WeightEdge> edges, int nodeNum, long weightOfNoEdge) {
                 var adjacencyMatrix = new long[nodeNum, nodeNum];
                 foreach (var edge in edges) {
 

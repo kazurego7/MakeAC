@@ -1,6 +1,6 @@
 {
     "$schema": "http://json.schemastore.org/template",
-    "author": "Kazuki Wada",
+    "author": "kazurego7",
     "classifications": [
         "Common",
         "Console"
@@ -16,6 +16,16 @@
             "defaultValue": "false"
         }
     },
+    "sources": [
+        {
+            "source": "./",
+            "target": "./",
+            "exclude": [
+                "**/[Bb]in/**",
+                "**/[Oo]bj/**"
+            ]
+        }
+    ],
     "postActions": [
         {
             "condition": "(!skipRestore)",
