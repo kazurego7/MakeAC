@@ -24,7 +24,7 @@ namespace AtCoderTemplate {
             return Console.ReadLine ().Split (' ').ToList ();
         }
 
-        public static List<List<string>> ReadRows (int n) {
+        public static List<List<string>> ReadRows (int rowNum) {
             /*
             入力例
             A1 B1 C1 ... Z1
@@ -36,10 +36,10 @@ namespace AtCoderTemplate {
             出力例
             [[A1, B1, C1, ... Z1], [A2, B2, C2, ... Z2], ... [An, Bn, Cn, ... Zn]]
             */
-            return Enumerable.Range (0, n).Select (i => Reads ()).ToList ();
+            return Enumerable.Range (0, rowNum).Select (i => Reads ()).ToList ();
         }
 
-        public static List<List<string>> ReadColumns (int n) {
+        public static List<List<string>> ReadColumns (int rowNum, int colNum) {
             /*
             入力例
             A1 B1 C1 ... Z1
@@ -51,9 +51,8 @@ namespace AtCoderTemplate {
             出力例
             [[A1, A2, A3, ... An], [B1, B2, B3, ... Bn], ... [Z1, Z2, Z3, ... Zn]]
             */
-            var rows = ReadRows (n);
-            var m = rows.IsEmpty () ? 0 : rows[0].Count;
-            return Enumerable.Range (0, m).Select (i => rows.Select (items => items[i].ToString ()).ToList ()).ToList ();
+            var rows = ReadRows (rowNum);
+            return Enumerable.Range (0, colNum).Select (i => rows.Select (items => items[i].ToString ()).ToList ()).ToList ();
         }
 
         public static int ToInt (this string str) {
@@ -84,13 +83,6 @@ namespace AtCoderTemplate {
         }
         public static List<long> ReadLongs () {
             return Reads ().ToLongs ();
-        }
-
-        public static List<List<int>> ReadIntColumns (int n) {
-            return ReadColumns (n).Select (column => column.ToInts ()).ToList ();
-        }
-        public static List<List<long>> ReadLongColumns (int n) {
-            return ReadColumns (n).Select (column => column.ToLongs ()).ToList ();
         }
 
         public static void Print<T> (T item) {
