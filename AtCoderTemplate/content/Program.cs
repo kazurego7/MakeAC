@@ -508,7 +508,7 @@ namespace AtCoderTemplate {
         /// シーケンスを1-based indexingなリスト(っぽいDictionary)に変換する
         /// </summary>
         /// <returns>1-based indexingなDictionaryを返す</returns>
-        public static Dictionary<int, T> ToOneBasedIndexing<T> (IEnumerable<T> source) {
+        public static Dictionary<int, T> ToOneBasedIndexing<T> (this IEnumerable<T> source) {
             return source.Select ((x, i) => new KeyValuePair<int, T> (i + 1, x)).ToDictionary (kv => kv.Key, kv => kv.Value);
         }
 
