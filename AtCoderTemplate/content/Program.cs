@@ -361,7 +361,7 @@ namespace AtCoderTemplate {
         /// </summary>
         /// <param name="initialConditions">初項、Dictionaryの形式</param>
         /// <param name="recurrenceRelation">漸化式、以前の項の計算はDictonaryから得る</param>
-        /// /// <param name="indexPatterns">項dp_(i,j,k...)の添字(i,j,k...)の全パターン。添字はValueTupleか匿名型で表す</param>
+        /// <param name="indexPatterns">項dp_(i,j,k...)の添字(i,j,k...)のトポロジカル順序を持つパターン。添字はValueTupleか匿名型で表す</param>
         /// <typeparam name="Indexes">項dp_(i,j,k...)の添字(i,j,k...)</typeparam>
         /// <typeparam name="Result">項dp_(i,j,k...)の計算結果</typeparam>
         /// <returns>項dp_(i,j,k...)の全ての計算結果をDictionaryで返す</returns>
@@ -502,6 +502,14 @@ namespace AtCoderTemplate {
 
         public static TR Pipe<T, TR> (this T arg, Func<T, TR> func) {
             return func (arg);
+        }
+
+        /// <summary>
+        /// シーケンスを1-based indexingなリスト(っぽいDictionary)に変換する
+        /// </summary>
+        /// <returns>1-based indexingなDictionaryを返す</returns>
+        public static Dictionary<int, T> ToOneBasedIndexing<T> (IEnumerable<T> source) {
+            return source.Select ((x, i) => new KeyValuePair<int, T> (i + 1, x)).ToDictionary (kv => kv.Key, kv => kv.Value);
         }
 
         /// <summary>
