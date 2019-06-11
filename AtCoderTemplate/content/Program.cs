@@ -323,7 +323,7 @@ namespace AtCoderTemplate {
         /// <param name="predicate">条件の述語関数</param>
         /// <param name="ng">条件を満たさない既知のindex</param>
         /// <param name="ok">条件を満たす既知のindex</param>
-        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
+        /// <returns>条件を満たすindexの内、隣がfalseとなるtrueのindexを返す</returns>
         public static int BinarySearch<T> (List<T> list, Func<T, bool> predicate, int ng, int ok) {
             while (Abs (ok - ng) > 1) {
                 int mid = (ok + ng) / 2;
@@ -337,25 +337,45 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// 二分探索法
+        /// 左二分探索法
         /// </summary>
-        /// <param name="list">条件の境界に対し、条件を満たすindexが左にあるリスト</param>
+        /// <param name="list">条件の境界(falseとtrueの変わるところ)で、trueが左にあるリスト</param>
         /// <param name="predicate">条件の述語関数</param>
-        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearchLeft<T> (List<T> list, Func<T, bool> predicate) {
+        /// <returns>左隣がfalseになるtrueのindexを返す</returns>
+        public static int LeftBinarySearch<T> (List<T> list, Func<T, bool> predicate) {
             return BinarySearch (list, predicate, list.Count, -1);
         }
 
         /// <summary>
-        /// 二分探索法
+        /// 右二分探索法
         /// </summary>
-        /// <param name="list">条件の境界に対し、条件を満たすindexが右にあるリスト</param>
+        /// <param name="list">条件の境界(falseとtrueの変わるところ)で、trueが右にあるリスト</param>
         /// <param name="predicate">条件の述語関数</param>
-        /// <returns>条件を満たすindexの内、境界に最も近いものを返す</returns>
-        public static int BinarySearchRight<T> (List<T> list, Func<T, bool> predicate) {
+        /// <returns>左隣がfalseになるtrueのindexを返す</returns>
+        public static int RightBinarySearch<T> (List<T> list, Func<T, bool> predicate) {
             return BinarySearch (list, predicate, -1, list.Count);
         }
 
+        /// <summary>
+        /// DynamicProgrammingの形式(貰うDP)
+        /// </summary>
+        /// <param name="initialConditions">初項、Dictionaryの形式</param>
+        /// <param name="recurrenceRelation">漸化式、以前の項の計算はDictonaryから得る</param>
+        /// /// <param name="indexPatterns">項dp_(i,j,k...)の添字(i,j,k...)の全パターン。添字はValueTupleか匿名型で表す</param>
+        /// <typeparam name="Indexes">項dp_(i,j,k...)の添字(i,j,k...)</typeparam>
+        /// <typeparam name="Result">項dp_(i,j,k...)の計算結果</typeparam>
+        /// <returns>項dp_(i,j,k...)の全ての計算結果をDictionaryで返す</returns>
+        public static Dictionary<Indexes, Result> DynamicProgramming<Indexes, Result> (Dictionary<Indexes, Result> initialConditions, Func<Dictionary<Indexes, Result>, Indexes, Result> recurrenceRelation, IEnumerable<Indexes> indexPatterns) {
+            var conditions = new Dictionary<Indexes, Result> (initialConditions);
+            foreach (var indexes in indexPatterns) {
+                conditions.Add (indexes, recurrenceRelation (conditions, indexes));
+            }
+            return conditions;
+        }
+
+        /// <summary>
+        /// 重み付きの辺
+        /// </summary>
         public struct WeightEdge {
             int SourceNode { get; }
             int TargetNode { get; }
