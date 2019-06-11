@@ -558,4 +558,17 @@ namespace AtCoderTemplate {
             return result;
         }
     }
+
+    public static class MyEnumerable {
+
+        /// <summary>
+        /// 左閉右開区間 [startIndex,endIndex) を得る
+        /// </summary>
+        /// <param name="startIndex">始まりのインデックス。含む</param>
+        /// <param name="endIndex">終わりのインデックス。含まない</param>
+        public static IEnumerable<int> Interval (int startIndex, int endIndex) {
+            if (endIndex - startIndex < 0) new ArgumentException ();
+            return Enumerable.Range (startIndex, endIndex - startIndex);
+        }
+    }
 }
