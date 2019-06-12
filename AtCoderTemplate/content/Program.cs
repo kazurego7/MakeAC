@@ -356,19 +356,46 @@ namespace AtCoderTemplate {
             return BinarySearch (list, predicate, -1, list.Count);
         }
 
+        // .NetFramework 4.6.2 ではタプルの記法がまだ使えない
+
+        // /// <summary>
+        // /// DynamicProgrammingの形式(貰うDP)
+        // /// 項dp_(i,j,k...)の漸化式、初項、漸化式の計算順序（添字のパターン）、から漸化式を計算する
+        // /// </summary>
+        // /// <param name="calculationOrders">漸化式の計算順序、項dp_(i,j,k...)の添字(i,j,k...)のトポロジカル順序を持つシーケンス</param>
+        // /// <param name="initialConditions">初項とその添字のペア、のシーケンス</param>
+        // /// <param name="recurrenceRelation">項dp_(i,j,k...)の漸化式、以前の項の計算はDictonaryから得る</param>
+        // /// <typeparam name="Indexes">項dp_(i,j,k...)の添字(i,j,k...)</typeparam>
+        // /// <typeparam name="Result">項dp_(i,j,k...)の計算結果</typeparam>
+        // /// <returns>項dp_(i,j,k...)の全ての計算結果をDictionaryで返す</returns>
+        // public static Dictionary<Indexes, Result> DynamicProgramming<Indexes, Result> (
+        //     IEnumerable<Indexes> calculationOrders //
+        //     , IEnumerable < (Indexes indexes, Result result) > initialConditions //
+        //     , Func<Dictionary<Indexes, Result>, Indexes, Result> recurrenceRelation) {
+        //     var conditions = initialConditions.ToDictionary (kv => kv.indexes, kv => kv.result);
+        //     foreach (var order in calculationOrders) {
+        //         conditions.Add (order, recurrenceRelation (conditions, order));
+        //     }
+        //     return conditions;
+        // }
+
         /// <summary>
         /// DynamicProgrammingの形式(貰うDP)
+        /// 項dp_(i,j,k...)の漸化式、初項、漸化式の計算順序（添字のパターン）、から漸化式を計算する
         /// </summary>
-        /// <param name="initialConditions">初項、Dictionaryの形式</param>
-        /// <param name="recurrenceRelation">漸化式、以前の項の計算はDictonaryから得る</param>
-        /// <param name="indexPatterns">項dp_(i,j,k...)の添字(i,j,k...)のトポロジカル順序を持つパターン。添字はValueTupleか匿名型で表す</param>
+        /// <param name="calculationOrders">漸化式の計算順序、項dp_(i,j,k...)の添字(i,j,k...)のトポロジカル順序を持つシーケンス</param>
+        /// <param name="initialConditions">初項とその添字のペア、のシーケンス</param>
+        /// <param name="recurrenceRelation">項dp_(i,j,k...)の漸化式、以前の項の計算はDictonaryから得る</param>
         /// <typeparam name="Indexes">項dp_(i,j,k...)の添字(i,j,k...)</typeparam>
         /// <typeparam name="Result">項dp_(i,j,k...)の計算結果</typeparam>
         /// <returns>項dp_(i,j,k...)の全ての計算結果をDictionaryで返す</returns>
-        public static Dictionary<Indexes, Result> DynamicProgramming<Indexes, Result> (Dictionary<Indexes, Result> initialConditions, Func<Dictionary<Indexes, Result>, Indexes, Result> recurrenceRelation, IEnumerable<Indexes> indexPatterns) {
-            var conditions = new Dictionary<Indexes, Result> (initialConditions);
-            foreach (var indexes in indexPatterns) {
-                conditions.Add (indexes, recurrenceRelation (conditions, indexes));
+        public static Dictionary<Indexes, Result> DynamicProgramming<Indexes, Result> (
+            IEnumerable<Indexes> calculationOrders //
+            , IEnumerable<KeyValuePair<Indexes, Result>> initialConditions //
+            , Func<Dictionary<Indexes, Result>, Indexes, Result> recurrenceRelation) {
+            var conditions = initialConditions.ToDictionary (kv => kv.Key, kv => kv.Value);
+            foreach (var order in calculationOrders) {
+                conditions.Add (order, recurrenceRelation (conditions, order));
             }
             return conditions;
         }
