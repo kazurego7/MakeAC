@@ -166,13 +166,13 @@ namespace AtCoderTemplate {
         /// </summary>
         /// <param name="n">全体の数</param>
         /// <param name="k">並べる数</param>
-        /// <param name="divisor">返り値がlongを超えないようにdivisorで割った余りを得る</param>
+        /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
         /// <returns>nPk (をdivisorで割った余り)</returns>
-        public static long nPk (int n, int k, long divisor) {
+        public static int nPk (int n, int k, int divisor) {
             if (k > n) {
-                return 0L;
+                return 0;
             } else {
-                return Enumerable.Range (n - k + 1, k).Aggregate (1L, ((i, m) => (i * m) % divisor));
+                return Enumerable.Range (n - k + 1, k).Aggregate (1, ((i, m) => (i * m) % divisor));
             }
         }
 
@@ -189,9 +189,9 @@ namespace AtCoderTemplate {
         /// O(N)
         /// </summary>
         /// <param name="n"></param>
-        /// <param name="divisor">返り値がlongを超えないようにdivisorで割った余りを得る</param>
+        /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
         /// <returns>n! (をdivisorで割った余り)</returns>
-        public static long Fact (int n, long divisor) {
+        public static int Fact (int n, int divisor) {
             return nPk (n, n, divisor);
         }
 
