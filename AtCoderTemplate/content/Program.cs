@@ -128,12 +128,10 @@ namespace AtCoderTemplate {
     }
 
     public static class MyConstants {
-        public static List<char> LowerAlphabets () {
-            return Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i).ToList ();
-        }
-        public static List<char> UpperAlphabets () {
-            return Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i).ToList ();
-        }
+        public static IEnumerable<char> lowerAlphabets = Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i);
+        public static IEnumerable<char> upperAlphabets = Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i);
+
+        public static int p10_9plus7 = (int) Pow (10, 9) + 7;
     }
 
     public static class MyNumericFunctions {
