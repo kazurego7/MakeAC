@@ -151,6 +151,18 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// 冪を得る
+        /// </summary>
+        /// <param name="b">底</param>
+        /// <param name="n">冪指数</param>
+        /// <param name="divisor">返り値がintを超えないようにdivisorで割ったあまりを得る</param>
+        /// <returns>bのn乗(をdivisorで割ったあまり)</returns>
+        public static int PowRem (long b, int n, int divisor) {
+            return Enumerable.Repeat (b, n)
+                .Aggregate (1, (accm, i) => (int) ((accm * i) % divisor));
+        }
+
+        /// <summary>
         /// 順列の総数を得る
         /// O(N-K)
         /// </summary>
