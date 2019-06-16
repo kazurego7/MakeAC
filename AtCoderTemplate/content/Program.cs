@@ -414,7 +414,7 @@ namespace AtCoderTemplate {
         // }
 
         /// <summary>
-        /// 右へのしゃくとり法
+        /// 右へのしゃくとり法の形式
         /// </summary>
         /// <param name="n">なめるシーケンスの長さ</param>
         /// <param name="Predicate">更新のための条件関数。indexの(left,right)をとり、条件を満たすとUpdateConditionを行う</param>
@@ -422,7 +422,7 @@ namespace AtCoderTemplate {
         /// <param name="Update">状態更新関数。indexのleft, rightと前のconditionをとり、更新したconditionを返す</param>
         /// <typeparam name="TR"></typeparam>
         /// <returns></returns>
-        public static TR TwoPointersRightMethod<TR> (int n, Func<int, int, bool> Predicate, TR initialCondition, Func<int, int, TR, TR> Update) {
+        public static TR TwoPointersRight<TR> (int n, Func<int, int, bool> Predicate, TR initialCondition, Func<int, int, TR, TR> Update) {
             var l = 0;
             var r = 0;
             TR condition = initialCondition;
