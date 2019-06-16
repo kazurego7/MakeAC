@@ -414,6 +414,31 @@ namespace AtCoderTemplate {
         // }
 
         /// <summary>
+        /// 右へのしゃくとり法
+        /// </summary>
+        /// <param name="n">なめるシーケンスの長さ</param>
+        /// <param name="Predicate">更新のための条件関数。indexの(left,right)をとり、条件を満たすとUpdateConditionを行う</param>
+        /// <param name="initialCondition">初期状態。</param>
+        /// <param name="Update">状態更新関数。indexのleft, rightと前のconditionをとり、更新したconditionを返す</param>
+        /// <typeparam name="TR"></typeparam>
+        /// <returns></returns>
+        public static TR TwoPointersRightMethod<TR> (int n, Func<int, int, bool> Predicate, TR initialCondition, Func<int, int, TR, TR> Update) {
+            var l = 0;
+            var r = 0;
+            TR condition = initialCondition;
+            while (r < n) {
+                while (r < n && !Predicate (l, r)) {
+                    r += 1;
+                }
+                while (r < n && l != r && Predicate (l, r)) {
+                    condition = Update (l, r, condition);
+                    l += 1;
+                }
+            }
+            return condition;
+        }
+
+        /// <summary>
         /// 重み付きの辺
         /// </summary>
         public struct WeightEdge {
