@@ -558,6 +558,13 @@ namespace AtCoderTemplate {
             return !source.Any ();
         }
 
+        /// <summary>
+        /// シーケンスの要素ごとに副作用を起こす（シーケンスはそのまま）
+        /// </summary>
+        /// <param name="source">シーケンス</param>
+        /// <param name="action">副作用。要素をとるアクション</param>
+        /// <typeparam name="T">シーケンスの要素の型</typeparam>
+        /// <returns>元のシーケンス</returns>
         public static IEnumerable<T> Do<T> (this IEnumerable<T> source, Action<T> action) {
             foreach (var item in source) {
                 action (item);
@@ -565,8 +572,27 @@ namespace AtCoderTemplate {
             return source;
         }
 
+        /// <summary>
+        /// パイプライン演算子のようにデータを変換する（関数を適用する）
+        /// </summary>
+        /// <param name="arg">変換するデータ</param>
+        /// <param name="func">変換</param>
+        /// <typeparam name="T">変換元のデータの型</typeparam>
+        /// <typeparam name="TR">変換先のデータの型</typeparam>
+        /// <returns>変換されたデータ</returns>
         public static TR Apply<T, TR> (this T arg, Func<T, TR> func) {
             return func (arg);
+        }
+
+        /// <summary>
+        /// データを標準出力に流す（データはそのまま）
+        /// </summary>
+        /// <param name="item">データ</param>
+        /// <typeparam name="T">データの型</typeparam>
+        /// <returns>元のデータ</returns>
+        public static T Trace<T> (this T item) {
+            Print (item);
+            return item;
         }
 
         /// <summary>
