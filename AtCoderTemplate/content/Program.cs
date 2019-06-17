@@ -565,7 +565,7 @@ namespace AtCoderTemplate {
             return source;
         }
 
-        public static TR Pipe<T, TR> (this T arg, Func<T, TR> func) {
+        public static TR Apply<T, TR> (this T arg, Func<T, TR> func) {
             return func (arg);
         }
 
