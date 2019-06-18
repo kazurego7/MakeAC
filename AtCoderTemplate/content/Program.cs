@@ -643,7 +643,6 @@ namespace AtCoderTemplate {
     }
 
     public static class MyEnumerable {
-
         /// <summary>
         /// 左閉右開区間 [startIndex,endIndex) を得る
         /// </summary>
