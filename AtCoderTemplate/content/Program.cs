@@ -439,95 +439,63 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// 重み付きの辺
+        /// グラフの辺
         /// </summary>
-        public struct WeightEdge {
-            int SourceNode { get; }
-            int TargetNode { get; }
-            long Weight { get; }
+        public struct Edge {
+            public int SourceNode { get; }
+            public int TargetNode { get; }
+            public long Weight { get; }
 
-            public WeightEdge (int sourceNode, int targetNode, long weight) {
+            public Edge (int sourceNode, int targetNode, long weight) {
                 SourceNode = sourceNode;
                 TargetNode = targetNode;
                 Weight = weight;
             }
         }
 
-        public static List<WeightEdge> ToWeightEdges (List<int> sourceNodes, List<int> targetNodes, List<long> weights) {
+        public static IEnumerable<Edge> ToEdges (List<int> sourceNodes, List<int> targetNodes, List<long> weights) {
             return Enumerable.Range (0, sourceNodes.Count)
-                .Select (i => new WeightEdge (sourceNode: sourceNodes[i], targetNode: targetNodes[i], weight: weights[i]))
-                .ToList ();
+                .Select (i => new Edge (sourceNode: sourceNodes[i], targetNode: targetNodes[i], weight: weights[i]));
         }
 
-        /// <summary>
-        /// 重み付きグラフ
-        /// </summary>
-        public class WeightGraph {
-            long[, ] adjacencyMatrix;
-            public int NodeNum { get; }
-            public WeightGraph (int nodeNum, long weightOfNoEdge) {
-                var adjacencyMatrix = new long[nodeNum, nodeNum];
-                foreach (var i in Enumerable.Range (0, nodeNum)) {
-                    foreach (var j in Enumerable.Range (0, nodeNum)) {
-                        if (i != j) {
-                            adjacencyMatrix[i, j] = weightOfNoEdge;
-                        } else {
-                            adjacencyMatrix[i, j] = 0;
-                        }
-                    }
-                }
-
-                this.adjacencyMatrix = adjacencyMatrix;
-                this.NodeNum = nodeNum;
+        public static List<IEnumerable<int>> ToAdjacencyListOfUndirectedGraph (IEnumerable<Edge> edges, int nodeNum) {
+            var adjacencyList = Enumerable.Range (0, nodeNum).Select (_ => Enumerable.Empty<int> ()).ToList ();
+            foreach (var edge in edges) {
+                adjacencyList[edge.SourceNode] = adjacencyList[edge.SourceNode].Append (edge.TargetNode);
+                adjacencyList[edge.TargetNode] = adjacencyList[edge.TargetNode].Append (edge.SourceNode);
             }
+            return adjacencyList;
+        }
 
-            public WeightGraph (List<WeightEdge> edges, int nodeNum, long weightOfNoEdge) {
-                var adjacencyMatrix = new long[nodeNum, nodeNum];
-                foreach (var edge in edges) {
-
-                }
-            }
-
-            public WeightGraph (WeightGraph graph) {
-                this.adjacencyMatrix = new long[graph.NodeNum, graph.NodeNum];
-                foreach (var i in Enumerable.Range (0, graph.NodeNum)) {
-                    foreach (var j in Enumerable.Range (0, graph.NodeNum)) {
-                        this.adjacencyMatrix[i, j] = graph.GetLength (i, j);
-                    }
-                }
-                this.NodeNum = graph.NodeNum;
-            }
-
-            public List<List<long>> ToList () {
-                return Enumerable.Range (0, NodeNum).Select (i =>
-                    Enumerable.Range (0, NodeNum).Select (j =>
-                        adjacencyMatrix[i, j]
+        public static List<List<long>> ToAdjacencyMatrixOfUndirectedGraph (IEnumerable<Edge> edges, int nodeNum, long weightOfNoEdge) {
+            var adjacencyMatrix = Enumerable.Range (0, nodeNum)
+                .Select (i =>
+                    Enumerable.Range (0, nodeNum)
+                    .Select (k =>
+                        weightOfNoEdge
                     ).ToList ()
                 ).ToList ();
+            foreach (var edge in edges) {
+                adjacencyMatrix[edge.SourceNode][edge.TargetNode] = edge.Weight;
+                adjacencyMatrix[edge.TargetNode][edge.SourceNode] = edge.Weight;
             }
-
-            public void Add (int node1, int node2, long distance) {
-                adjacencyMatrix[node1, node2] = distance;
-            }
-
-            public long GetLength (int node1, int node2) {
-                return adjacencyMatrix[node1, node2];
-            }
+            return adjacencyMatrix;
         }
 
         /// <summary>
         /// ワーシャルフロイド法
         /// O(N^3)
         /// </summary>
-        /// <param name="graph">グラフ</param>
+        /// <param name="adjacencyMatrix">隣接行列</param>
         /// <param name="nodeNum">ノードの数</param>
-        /// <returns>各ノード間の最短距離を辺として持つグラフ</returns>
-        public static WeightGraph WarshallFloyd (WeightGraph graph) {
-            var res = new WeightGraph (graph);
-            foreach (var b in Enumerable.Range (0, graph.NodeNum)) {
-                foreach (var a in Enumerable.Range (0, graph.NodeNum)) {
-                    foreach (var c in Enumerable.Range (0, graph.NodeNum)) {
-                        res.Add (a, c, Min (res.GetLength (a, c), res.GetLength (a, b) + res.GetLength (b, c)));
+        /// <returns>各ノード間の最短距離を重みとする隣接行列</returns>
+        public static List<List<long>> WarshallFloyd (List<List<long>> adjacencyMatrix) {
+            var nodeNum = adjacencyMatrix.Count;
+            var res = Enumerable.Range (0, nodeNum).Select (i => new List<long> (adjacencyMatrix[i])).ToList ();
+            foreach (var b in Enumerable.Range (0, nodeNum)) {
+                foreach (var a in Enumerable.Range (0, nodeNum)) {
+                    foreach (var c in Enumerable.Range (0, nodeNum)) {
+                        res[a][c] = Min (res[a][c], res[a][b] + res[b][c]);
                     }
                 }
             }
