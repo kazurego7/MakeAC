@@ -351,7 +351,7 @@ namespace AtCoderTemplate {
         /// </summary>
         /// <param name="list">条件の境界(falseとtrueの変わるところ)で、trueが左にあるリスト</param>
         /// <param name="predicate">条件の述語関数</param>
-        /// <returns>左隣がfalseになるtrueのindexを返す</returns>
+        /// <returns>右隣がfalseになるtrueのindexを返す</returns>
         public static int LeftBinarySearch<T> (List<T> list, Func<T, bool> predicate) {
             return BinarySearch (list, predicate, list.Count, -1);
         }
