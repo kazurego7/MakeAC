@@ -55,6 +55,26 @@ namespace AtCoderTemplate {
             return Enumerable.Range (0, colNum).Select (i => rows.Select (items => items[i].ToString ()).ToList ()).ToList ();
         }
 
+        public static List<List<string>> ReadGridGraph (int height, int width) {
+            /*
+            入力例
+            A1B1C1...Z1
+            A2B2C2...Z2
+            ...
+            AnBnCn...Zn
+           
+
+            出力例
+            [[A1, B1, C1, ... Z1], [A2, B2, C2, ... Z2], ... [An, Bn, Cn, ... Zn]]
+            */
+            return Enumerable.Range (0, height)
+                .Select (i =>
+                    Read ()
+                    .Select (c => c.ToString ())
+                    .ToList ()
+                ).ToList ();
+        }
+
         public static int ToInt (this string str) {
             return int.Parse (str);
         }
@@ -123,6 +143,12 @@ namespace AtCoderTemplate {
         public static void PrintRows<T> (IEnumerable<IEnumerable<T>> sources) {
             foreach (var row in sources) {
                 PrintRow (row);
+            }
+        }
+
+        public static void PrintGridGraph<T> (IEnumerable<IEnumerable<T>> sources) {
+            foreach (var row in sources) {
+                Print (String.Concat (row));
             }
         }
     }
