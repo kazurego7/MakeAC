@@ -479,21 +479,21 @@ namespace AtCoderTemplate {
             }
         }
 
-        public static IEnumerable<Edge> ToEdges (List<int> sourceNodes, List<int> targetNodes, List<long> weights) {
+        public static IEnumerable<Edge> CreateEdges (List<int> sourceNodes, List<int> targetNodes, List<long> weights) {
             return Enumerable.Range (0, sourceNodes.Count)
                 .Select (i => new Edge (sourceNode: sourceNodes[i], targetNode: targetNodes[i], weight: weights[i]));
         }
 
-        public static List<IEnumerable<int>> ToAdjacencyListOfUndirectedGraph (IEnumerable<Edge> edges, int nodeNum) {
-            var adjacencyList = Enumerable.Range (0, nodeNum).Select (_ => Enumerable.Empty<int> ()).ToList ();
+        public static List<Dictionary<int, long>> CreateAdjacencyListOfUndirectedGraph (IEnumerable<Edge> edges, int nodeNum) {
+            var adjacencyList = Enumerable.Range (0, nodeNum).Select (_ => new Dictionary<int, long> ()).ToList ();
             foreach (var edge in edges) {
-                adjacencyList[edge.SourceNode] = adjacencyList[edge.SourceNode].Append (edge.TargetNode);
-                adjacencyList[edge.TargetNode] = adjacencyList[edge.TargetNode].Append (edge.SourceNode);
+                adjacencyList[edge.SourceNode].Add (edge.TargetNode, edge.Weight);
+                adjacencyList[edge.TargetNode].Add (edge.SourceNode, edge.Weight);
             }
             return adjacencyList;
         }
 
-        public static List<List<long>> ToAdjacencyMatrixOfUndirectedGraph (IEnumerable<Edge> edges, int nodeNum, long weightOfNoEdge) {
+        public static List<List<long>> CreateAdjacencyMatrixOfUndirectedGraph (IEnumerable<Edge> edges, int nodeNum, long weightOfNoEdge) {
             var adjacencyMatrix = Enumerable.Range (0, nodeNum)
                 .Select (i =>
                     Enumerable.Range (0, nodeNum)
