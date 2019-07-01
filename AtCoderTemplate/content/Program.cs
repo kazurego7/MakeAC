@@ -202,14 +202,6 @@ namespace AtCoderTemplate {
             }
         }
 
-        public static long nPk (int n, int k) {
-            if (k > n) {
-                return 0L;
-            } else {
-                return Enumerable.Range (n - k + 1, k).Aggregate (1L, ((i, m) => (i * m)));
-            }
-        }
-
         /// <summary>
         /// 階乗を得る
         /// O(N)
@@ -219,24 +211,6 @@ namespace AtCoderTemplate {
         /// <returns>n! (をdivisorで割った余り)</returns>
         public static int Fact (int n, int divisor) {
             return nPk (n, n, divisor);
-        }
-
-        public static long Fact (int n) {
-            return nPk (n, n);
-        }
-
-        /// <summary>
-        /// 組み合わせの総数を得る
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="k"></param>
-        /// <returns>nCk</returns>
-        public static long nCk (int n, int k) {
-            if (k > n) {
-                return 0L;
-            } else {
-                return nPk (n, k) / Fact (k);
-            }
         }
 
         /// <summary>
