@@ -214,6 +214,36 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// 階乗のテーブルを得る
+        /// O(N)
+        /// </summary>
+        /// <param name="nmax"></param>
+        /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
+        /// <returns></returns>
+        public static int[] FactTable (int nmax, int divisor) {
+            return Enumerable.Range (1, nmax)
+                .Scanl (1, (accm, i) => (int) ((long) accm * i % divisor))
+                .ToArray ();
+        }
+
+        public static int[, ] PascalsTriangle (int nmax, int kmax, int divisor) {
+            var comb = new int[2000 + 1, 2000 + 1];
+            foreach (var n in MyEnumerable.Interval (0, 2000 + 1)) {
+                foreach (var k in MyEnumerable.Interval (0, 2000 + 1)) {
+                    if (n < k) continue;
+
+                    if (k == 0) {
+                        comb[n, k] = 1;
+                    } else {
+                        comb[n, k] = (int) (((long) comb[n - 1, k - 1] + comb[n - 1, k]) % divisor);
+                    }
+                }
+            }
+
+            return comb;
+        }
+
+        /// <summary>
         /// 最大公約数を得る 
         /// O(log N)
         /// </summary>
