@@ -531,6 +531,46 @@ namespace AtCoderTemplate {
             }
             return res;
         }
+
+        public class UnionFind {
+            List<int> parent;
+            List<int> size;
+            public UnionFind (int N) {
+                // 最初はすべて異なるグループ番号(root)が割り当てられる
+                parent = Enumerable.Range (0, N).ToList ();
+                size = Enumerable.Repeat (1, N).ToList ();
+            }
+
+            // 頂点uの属するグループ番号(root)を探す
+            int Root (int u) {
+                if (parent[u] == u) {
+                    return u;
+                } else {
+                    var root = Root (parent[u]);
+                    parent[u] = root; // 経路圧縮
+                    return root;
+                }
+            }
+
+            // 2つのグループを統合する(rootが異なる場合、同じrootにする)
+            public void Unite (int u, int v) {
+                int root_u = Root (u);
+                int root_v = Root (v);
+                if (root_u == root_v) return;
+                parent[root_u] = root_v; // root_vをroot_uの親とする
+                size[root_v] += size[root_u];
+            }
+
+            public int Size (int u) {
+                return size[Root (u)];
+            }
+
+            public bool IsSame (int u, int v) {
+                int root_u = Root (u);
+                int root_v = Root (v);
+                return root_u == root_v;
+            }
+        }
     }
 
     public static class MyExtensions {
