@@ -157,18 +157,12 @@ namespace AtCoderTemplate {
         public static IEnumerable<char> lowerAlphabets = Enumerable.Range ('a', 'z' - 'a' + 1).Select (i => (char) i);
         public static IEnumerable<char> upperAlphabets = Enumerable.Range ('A', 'Z' - 'A' + 1).Select (i => (char) i);
 
-        public static int p10_9plus7 = (int) Pow (10, 9) + 7;
+        public static int p1000000007 = (int) Pow (10, 9) + 7;
     }
 
     public static class MyNumericFunctions {
-        public static bool IsEven (int a) {
-            return a % 2 == 0;
-        }
         public static bool IsEven (long a) {
             return a % 2 == 0;
-        }
-        public static bool IsOdd (int a) {
-            return !IsEven (a);
         }
         public static bool IsOdd (long a) {
             return !IsEven (a);
