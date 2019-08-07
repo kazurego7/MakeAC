@@ -8,6 +8,8 @@ using static AtCoderTemplate.MyInputOutputs;
 using static AtCoderTemplate.MyNumericFunctions;
 using static AtCoderTemplate.MyAlgorithm;
 using static AtCoderTemplate.MyExtensions;
+using static AtCoderTemplate.MyEnumerable;
+using static AtCoderTemplate.MyOtherFunctions;
 
 namespace AtCoderTemplate {
     public class Program {
@@ -673,6 +675,7 @@ namespace AtCoderTemplate {
             }
             return result;
         }
+
     }
 
     public static class MyEnumerable {
@@ -685,5 +688,38 @@ namespace AtCoderTemplate {
             if (endIndex - startIndex < 0) new ArgumentException ();
             return Enumerable.Range (startIndex, endIndex - startIndex);
         }
+    }
+
+    public static class MyOtherFunctions {
+        /// <summary>
+        /// CutFlagからCutIndexesへの変換
+        /// </summary>
+        /// <param name="flag">CutFlag</param>
+        /// <param name="flagSize">CutFlagのサイズ</param>
+        /// <returns>CutIndex</returns>
+        /// <example> CutFlagToCutIndex(10110, 5) => [0, 2, 3, 5, 6]</example>
+        public static IEnumerable<int> CutFlagToCutIndexes (int flag) {
+            int flagSize = (int) Log (flag, 2);
+            var indexes = new List<int> { 0 };
+            foreach (var i in MyEnumerable.Interval (0, flagSize)) {
+                if ((flag >> i) % 2 == 1) {
+                    indexes.Add (i + 1);
+                }
+            }
+            indexes.Add (flagSize + 1);
+            return indexes;
+        }
+
+        /// <summary>
+        /// CutIndexesで文字列を分割する
+        /// </summary>
+        /// <param name="source">元の文字列</param>
+        /// <param name="cutIndexes">分割する位置</param>
+        /// <returns>分割された文字列</returns>
+        /// <example>CutForIndexes("abcdef", [0, 2, 3, 5, 6]) => ["ab", "c", "de", "f"]</example>
+        public static IEnumerable<string> CutForIndexes (string source, IEnumerable<int> cutIndexes) {
+            return cutIndexes.MapAdjacent ((i0, i1) => source.Substring (i0, i1 - i0));
+        }
+
     }
 }
