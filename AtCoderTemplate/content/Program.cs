@@ -617,13 +617,14 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// データを標準出力に流す（データはそのまま）
+        /// データから副作用（出力や破壊的代入など）を生み、データを返す
         /// </summary>
-        /// <param name="item">データ</param>
+        /// <param name="item">元のデータ</param>
+        /// <param name="effect">副作用（出力や破壊的代入など）</param>
         /// <typeparam name="T">データの型</typeparam>
-        /// <returns>元のデータ</returns>
-        public static T Trace<T> (this T item) {
-            Print (item);
+        /// <returns>副作用を起こした後のデータ</returns>
+        public static T Effect<T> (this T item, Action<T> effect) {
+            effect (item);
             return item;
         }
 
