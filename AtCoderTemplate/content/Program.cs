@@ -571,6 +571,10 @@ namespace AtCoderTemplate {
             }
         }
 
+        /// <summary>
+        /// Comparison<T>(順序を定める高階関数 t -> t -> Orderingみたいなもの)からIComparer<T>の実体へ変換するクラス
+        /// </summary>
+        /// <typeparam name="T">順序付けられる型</typeparam>
         public class ComparisonToComparerConverter<T> : IComparer<T> {
             Comparison<T> comparison;
             public ComparisonToComparerConverter (Comparison<T> comparison) {
@@ -581,6 +585,11 @@ namespace AtCoderTemplate {
             }
         }
 
+        /// <summary>
+        /// 優先度付きキュー
+        /// 先頭参照・要素数がO(1)、要素の追加・先頭削除がO(log N)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         public class PriorityQueue<T> where T : IComparer<T> {
             SortedDictionary<T, Queue<T>> dict;
             int size = 0;
