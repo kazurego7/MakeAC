@@ -528,6 +528,9 @@ namespace AtCoderTemplate {
             return res;
         }
 
+    }
+
+    public static class MyDataStructure {
         public class UnionFind {
             List<int> parent;
             List<int> size;
@@ -567,10 +570,6 @@ namespace AtCoderTemplate {
                 return root_u == root_v;
             }
         }
-    }
-
-    public static class MyDataStructure {
-
     }
 
     public static class MyExtensions {
