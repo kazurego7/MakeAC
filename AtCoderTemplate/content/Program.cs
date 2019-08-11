@@ -692,17 +692,17 @@ namespace AtCoderTemplate {
 
     public static class MyOtherFunctions {
         /// <summary>
-        /// CutFlagからCutIndexesへの変換
+        /// フラグから分割するindexの位置の列への変換
         /// </summary>
-        /// <param name="flag">CutFlag</param>
-        /// <param name="flagSize">CutFlagのサイズ</param>
-        /// <returns>CutIndex</returns>
+        /// <param name="flags">二進数によるフラグ</param>
+        /// <param name="flagSize">フラグの数</param>
+        /// <returns>分割するindexの位置の列</returns>
         /// <example> CutFlagToCutIndex(10110, 5) => [0, 2, 3, 5, 6]</example>
-        public static IEnumerable<int> CutFlagToCutIndexes (int flag) {
-            int flagSize = (int) Log (flag, 2);
+        public static IEnumerable<int> CutFlagToIndexes (int flags) {
+            int flagSize = (int) Log (flags, 2);
             var indexes = new List<int> { 0 };
             foreach (var i in MyEnumerable.Interval (0, flagSize)) {
-                if ((flag >> i) % 2 == 1) {
+                if ((flags >> i) % 2 == 1) {
                     indexes.Add (i + 1);
                 }
             }
@@ -711,10 +711,10 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// CutIndexesで文字列を分割する
+        /// indexの列で文字列を分割する
         /// </summary>
         /// <param name="source">元の文字列</param>
-        /// <param name="cutIndexes">分割する位置</param>
+        /// <param name="cutIndexes">分割する位置の列</param>
         /// <returns>分割された文字列</returns>
         /// <example>CutForIndexes("abcdef", [0, 2, 3, 5, 6]) => ["ab", "c", "de", "f"]</example>
         public static IEnumerable<string> CutForIndexes (string source, IEnumerable<int> cutIndexes) {
