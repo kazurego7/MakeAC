@@ -7,6 +7,7 @@ using static AtCoderTemplate.MyConstants;
 using static AtCoderTemplate.MyInputOutputs;
 using static AtCoderTemplate.MyNumericFunctions;
 using static AtCoderTemplate.MyAlgorithm;
+using static AtCoderTemplate.MyDataStructure;
 using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyEnumerable;
 
@@ -566,6 +567,10 @@ namespace AtCoderTemplate {
                 return root_u == root_v;
             }
         }
+    }
+
+    public static class MyDataStructure {
+
     }
 
     public static class MyExtensions {
