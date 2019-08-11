@@ -9,7 +9,6 @@ using static AtCoderTemplate.MyNumericFunctions;
 using static AtCoderTemplate.MyAlgorithm;
 using static AtCoderTemplate.MyExtensions;
 using static AtCoderTemplate.MyEnumerable;
-using static AtCoderTemplate.MyOtherFunctions;
 
 namespace AtCoderTemplate {
     public class Program {
@@ -676,6 +675,17 @@ namespace AtCoderTemplate {
             return result;
         }
 
+        /// <summary>
+        /// indexの列で文字列を分割する
+        /// </summary>
+        /// <param name="source">元の文字列</param>
+        /// <param name="cutIndexes">分割する位置の列</param>
+        /// <returns>分割された文字列</returns>
+        /// <example>CutForIndexes("abcdef", [0, 2, 3, 5, 6]) => ["ab", "c", "de", "f"]</example>
+        public static IEnumerable<string> CutForIndexes (string source, IEnumerable<int> cutIndexes) {
+            return cutIndexes.MapAdjacent ((i0, i1) => source.Substring (i0, i1 - i0));
+        }
+
     }
 
     public static class MyEnumerable {
@@ -688,9 +698,7 @@ namespace AtCoderTemplate {
             if (endIndex - startIndex < 0) new ArgumentException ();
             return Enumerable.Range (startIndex, endIndex - startIndex);
         }
-    }
 
-    public static class MyOtherFunctions {
         /// <summary>
         /// フラグから分割するindexの位置の列への変換
         /// </summary>
@@ -709,17 +717,5 @@ namespace AtCoderTemplate {
             indexes.Add (flagSize + 1);
             return indexes;
         }
-
-        /// <summary>
-        /// indexの列で文字列を分割する
-        /// </summary>
-        /// <param name="source">元の文字列</param>
-        /// <param name="cutIndexes">分割する位置の列</param>
-        /// <returns>分割された文字列</returns>
-        /// <example>CutForIndexes("abcdef", [0, 2, 3, 5, 6]) => ["ab", "c", "de", "f"]</example>
-        public static IEnumerable<string> CutForIndexes (string source, IEnumerable<int> cutIndexes) {
-            return cutIndexes.MapAdjacent ((i0, i1) => source.Substring (i0, i1 - i0));
-        }
-
     }
 }
