@@ -741,6 +741,35 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// 数列の和をdivisorで割った余りを計算する
+        /// </summary>
+        /// <param name="source">数列</param>
+        /// <param name="divisor">割る数</param>
+        /// <returns>数列の和をdivisorで割った余り</returns>
+        public static int Sum (this IEnumerable<int> source, int divisor) {
+            return source.Aggregate (0, (a, b) => (int) (((long) a + b) % divisor));
+        }
+
+        /// <summary>
+        /// 数列の積を計算する
+        /// </summary>
+        /// <param name="source">数列</param>
+        /// <returns>数列の積</returns>
+        public static long Product (this IEnumerable<long> source) {
+            return source.Aggregate (1L, (a, b) => a * b);
+        }
+
+        /// <summary>
+        /// 数列の積をdivisorで割った余りを計算する
+        /// </summary>
+        /// <param name="source">数列</param>
+        /// <param name="divisor">割る数</param>
+        /// <returns>数列の積をdivisorで割った余り</returns>
+        public static int Product (this IEnumerable<int> source, int divisor) {
+            return source.Aggregate (1, (a, b) => (int) (((long) a * b) % divisor));
+        }
+
+        /// <summary>
         /// indexの列で文字列を分割する
         /// </summary>
         /// <param name="source">元の文字列</param>
