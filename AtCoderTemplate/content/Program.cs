@@ -442,7 +442,7 @@ namespace AtCoderTemplate {
         /// 右へのしゃくとり法の形式
         /// </summary>
         /// <param name="n">なめるシーケンスの長さ</param>
-        /// <param name="Predicate">更新のための条件関数。indexの(left,right)をとり、条件を満たすとUpdateConditionを行う</param>
+        /// <param name="Predicate">更新のための条件関数。indexの(left,right)をとり、条件を満たすとUpdateを行う</param>
         /// <param name="initialCondition">初期状態。</param>
         /// <param name="Update">状態更新関数。indexのleft, rightと前のconditionをとり、更新したconditionを返す</param>
         /// <typeparam name="TR"></typeparam>
