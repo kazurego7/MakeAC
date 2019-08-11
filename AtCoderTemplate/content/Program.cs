@@ -570,6 +570,58 @@ namespace AtCoderTemplate {
                 return root_u == root_v;
             }
         }
+
+        public class ComparisonToComparerConverter<T> : IComparer<T> {
+            Comparison<T> comparison;
+            public ComparisonToComparerConverter (Comparison<T> comparison) {
+                this.comparison = comparison;
+            }
+            public int Compare (T x, T y) {
+                return comparison (x, y);
+            }
+        }
+
+        public class PriorityQueue<T> where T : IComparer<T> {
+            SortedDictionary<T, Queue<T>> dict;
+            int size = 0;
+
+            public PriorityQueue () {
+                dict = new SortedDictionary<T, Queue<T>> ();
+            }
+
+            public PriorityQueue (IComparer<T> comparer) {
+                dict = new SortedDictionary<T, Queue<T>> (comparer);
+            }
+
+            public void Enqueue (T item) {
+                if (dict.ContainsKey (item)) {
+                    dict[item].Enqueue (item);
+                } else {
+                    var added = new Queue<T> ();
+                    added.Enqueue (item);
+                    dict.Add (item, added);
+                }
+                size += 1;
+            }
+
+            public T Peek () {
+                return dict.First ().Value.First ();
+            }
+
+            public int Size () {
+                return size;
+            }
+
+            public T Dequeue () {
+                var first = dict.First ();
+                if (first.Value.Count <= 1) {
+                    dict.Remove (first.Key);
+                }
+                size -= 1;
+                return first.Value.Dequeue ();
+
+            }
+        }
     }
 
     public static class MyExtensions {
