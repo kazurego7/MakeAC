@@ -1,0 +1,8 @@
+#r "./content/bin/Debug/netcoreapp2.0/AtCoderTemplate.dll"
+using AtCoderTemplate;
+using static System.Math;
+using static AtCoderTemplate.MyExtensions;
+using static AtCoderTemplate.MyInputOutputs;
+using static AtCoderTemplate.MyNumericFunctions;
+using static AtCoderTemplate.MyAlgorithm;
+using static AtCoderTemplate.MyConstants;
