@@ -590,7 +590,7 @@ namespace AtCoderTemplate {
         /// 先頭参照・要素数がO(1)、要素の追加・先頭削除がO(log N)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public class PriorityQueue<T> where T : IComparer<T> {
+        public class PriorityQueue<T> where T : IComparable<T> {
             SortedDictionary<T, Queue<T>> dict;
             int size = 0;
 
@@ -600,6 +600,10 @@ namespace AtCoderTemplate {
 
             public PriorityQueue (IComparer<T> comparer) {
                 dict = new SortedDictionary<T, Queue<T>> (comparer);
+            }
+
+            public PriorityQueue (Comparison<T> comparison) {
+                dict = new SortedDictionary<T, Queue<T>> (new ComparisonToComparerConverter<T> (comparison));
             }
 
             public void Enqueue (T item) {
