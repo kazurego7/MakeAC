@@ -464,6 +464,31 @@ namespace AtCoderTemplate {
             return condition;
         }
 
+        public static void TreeBFS (
+            int nodeCount,
+            IEnumerable<int> initialNodes,
+            Func<int, IEnumerable<int>> getChilds,
+            Predicate<int> continuePred,
+            Action<int, int> updateItem) {
+
+            var que = new Queue<int> ();
+            var visited = new bool[nodeCount];
+            foreach (var node in initialNodes) {
+                que.Enqueue (node);
+                visited[node] = true;
+            }
+
+            while (!que.IsEmpty ()) {
+                var parent = que.Dequeue ();
+                foreach (var child in getChilds (parent)) {
+                    if (visited[child] || continuePred (child)) continue;
+                    updateItem (parent, child);
+                    que.Enqueue (child);
+                    visited[child] = true;
+                }
+            }
+        }
+
         /// <summary>
         /// グラフの辺
         /// </summary>
