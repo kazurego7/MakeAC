@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -614,52 +615,62 @@ namespace AtCoderTemplate {
         /// 優先度付きキュー
         /// 先頭参照・要素数がO(1)、要素の追加・先頭削除がO(log N)
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public class PriorityQueue<T> where T : IComparable<T> {
-            SortedDictionary<T, Queue<T>> dict;
-            int size = 0;
+        /// <typeparam name="T">順序付きの型</typeparam>
+        public class PriorityQueue<T> : IEnumerable<IEnumerable<T>>
+            where T : IComparable<T> {
+                SortedDictionary<T, Queue<T>> dict;
+                int size = 0;
 
-            public PriorityQueue () {
-                dict = new SortedDictionary<T, Queue<T>> ();
-            }
-
-            public PriorityQueue (IComparer<T> comparer) {
-                dict = new SortedDictionary<T, Queue<T>> (comparer);
-            }
-
-            public PriorityQueue (Comparison<T> comparison) {
-                dict = new SortedDictionary<T, Queue<T>> (new ComparisonToComparerConverter<T> (comparison));
-            }
-
-            public void Enqueue (T item) {
-                if (dict.ContainsKey (item)) {
-                    dict[item].Enqueue (item);
-                } else {
-                    var added = new Queue<T> ();
-                    added.Enqueue (item);
-                    dict.Add (item, added);
+                public PriorityQueue () {
+                    dict = new SortedDictionary<T, Queue<T>> ();
                 }
-                size += 1;
-            }
 
-            public T Peek () {
-                return dict.First ().Value.First ();
-            }
-
-            public int Size () {
-                return size;
-            }
-
-            public T Dequeue () {
-                var first = dict.First ();
-                if (first.Value.Count <= 1) {
-                    dict.Remove (first.Key);
+                public PriorityQueue (IComparer<T> comparer) {
+                    dict = new SortedDictionary<T, Queue<T>> (comparer);
                 }
-                size -= 1;
-                return first.Value.Dequeue ();
 
+                public PriorityQueue (Comparison<T> comparison) {
+                    dict = new SortedDictionary<T, Queue<T>> (new ComparisonToComparerConverter<T> (comparison));
+                }
+
+                public void Enqueue (T item) {
+                    if (dict.ContainsKey (item)) {
+                        dict[item].Enqueue (item);
+                    } else {
+                        var added = new Queue<T> ();
+                        added.Enqueue (item);
+                        dict.Add (item, added);
+                    }
+                    size += 1;
+                }
+
+                public T Peek () {
+                    return dict.First ().Value.First ();
+                }
+
+                public int Size () {
+                    return size;
+                }
+
+                public T Dequeue () {
+                    var first = dict.First ();
+                    if (first.Value.Count <= 1) {
+                        dict.Remove (first.Key);
+                    }
+                    size -= 1;
+                    return first.Value.Dequeue ();
+                }
+
+                public IEnumerator<IEnumerable<T>> GetEnumerator () {
+                    foreach (var kv in dict) {
+                        yield return kv.Value;
+                    }
+                }
+
+                IEnumerator IEnumerable.GetEnumerator () {
+                    return GetEnumerator ();
+                }
             }
-        }
     }
 
     public static class MyExtensions {
