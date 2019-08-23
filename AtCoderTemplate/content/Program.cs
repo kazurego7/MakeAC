@@ -612,7 +612,16 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// 優先度付きキュー
+        /// IComparble<T>を持つ型Tから、その逆順序であるComparison<T>を得る
+        /// </summary>
+        /// <typeparam name="T">順序付きの型</typeparam>
+        /// <returns>IComparable<T>の逆順序</returns>
+        public static Comparison<T> ReverseOrder<T> () where T : IComparable<T> {
+            return (x, y) => -x.CompareTo (y);
+        }
+
+        /// <summary>
+        /// 優先度付きキュー(デフォルトでは昇順)
         /// 先頭参照・要素数がO(1)、要素の追加・先頭削除がO(log N)
         /// </summary>
         /// <typeparam name="T">順序付きの型</typeparam>
