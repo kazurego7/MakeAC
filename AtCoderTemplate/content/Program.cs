@@ -491,6 +491,44 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// 3分探索法 O(log N)
+        /// </summary>
+        /// <param name="l">定義域の最小値</param>
+        /// <param name="r">定義域の最大値</param>
+        /// <param name="f">凸な関数</param>
+        /// <param name="allowableError">許容誤差</param>
+        /// <param name="isDownwardConvex">下に凸か（falseならば上に凸）</param>
+        /// <returns>凸関数f(x)の許容誤差を含む極値への元を得る</returns>
+        public static double TernarySerch (double l, double r, Func<double, double> f, double allowableError, bool isDownwardConvex) {
+            while (r - l >= allowableError) {
+                var ml = l + (r - l) / 3; // mid left
+                var mr = l + (r - l) / 3 * 2.0; // mid right
+                var fml = f (ml);
+                var fmr = f (mr);
+                if (isDownwardConvex) {
+                    if (fml < fmr) {
+                        r = mr;
+                    } else if (fml > fmr) {
+                        l = ml;
+                    } else {
+                        l = ml;
+                        r = mr;
+                    }
+                } else {
+                    if (fml < fmr) {
+                        l = ml;
+                    } else if (fml > fmr) {
+                        r = mr;
+                    } else {
+                        l = ml;
+                        r = mr;
+                    }
+                }
+            }
+            return l;
+        }
+
+        /// <summary>
         /// グラフの辺
         /// </summary>
         public struct Edge {
