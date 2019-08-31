@@ -318,16 +318,16 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// nまでの素数を得る
+        /// 試し割り法 O(N√N)
         /// </summary>
         /// <param name="n">n > 1</param>
         /// <returns></returns>
-        public static IEnumerable<int> Prime (int n) {
+        public static IEnumerable<int> TrialDivision (int n) {
             if (!(n > 1)) throw new ArgumentOutOfRangeException ();
 
             var primes = new List<int> ();
             foreach (var i in Enumerable.Range (2, n - 1)) {
-                if (primes.All (p => i % p != 0)) {
+                if (primes.TakeWhile (p => p <= Sqrt (i)).All (p => i % p != 0)) {
                     primes.Add (i);
                 }
             }
@@ -360,7 +360,7 @@ namespace AtCoderTemplate {
 
             var e = new int[n + 1];
             var p = n;
-            var ps = Prime (n).ToList ();
+            var ps = TrialDivision (n).ToList ();
             var i = 0;
             while (p != 1) {
                 if (p % ps[i] == 0) {
