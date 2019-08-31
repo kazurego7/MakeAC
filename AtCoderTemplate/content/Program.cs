@@ -335,6 +335,22 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// エラトステネスの篩 O(N loglog N)
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static IEnumerable<int> SieveOfEratosthenes (int n) {
+            if (!(n > 1)) throw new ArgumentOutOfRangeException ();
+
+            var ps = Interval (2, n + 1);
+            while (!ps.IsEmpty () && ps.First () <= Sqrt (n)) {
+                var m = ps.First ();
+                ps = ps.Where (p => p % m != 0);
+            }
+            return ps;
+        }
+
+        /// <summary>
         /// 素因数分解
         /// </summary>
         /// <param name="n"></param>
