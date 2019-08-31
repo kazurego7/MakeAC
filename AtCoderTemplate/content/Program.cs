@@ -351,7 +351,7 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
-        /// 素因数分解
+        /// 素因数分解 O(N loglog N)
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
@@ -360,7 +360,7 @@ namespace AtCoderTemplate {
 
             var e = new int[n + 1];
             var p = n;
-            var ps = TrialDivision (n).ToList ();
+            var ps = SieveOfEratosthenes (n).ToList ();
             var i = 0;
             while (p != 1) {
                 if (p % ps[i] == 0) {
