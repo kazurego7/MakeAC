@@ -335,6 +335,29 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// 素因数分解
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static IEnumerable<int> PrimeFactrization (int n) {
+            if (!(n > 1)) throw new ArgumentOutOfRangeException ();
+
+            var e = new int[n + 1];
+            var p = n;
+            var ps = Prime (n).ToList ();
+            var i = 0;
+            while (p != 1) {
+                if (p % ps[i] == 0) {
+                    e[ps[i]] += 1;
+                    p /= ps[i];
+                    continue;
+                }
+                i += 1;
+            }
+            return e;
+        }
+
+        /// <summary>
         /// 順列を得る
         /// O(N!)
         /// </summary>
