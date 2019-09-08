@@ -541,6 +541,21 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// ランレングス符号化
+        /// </summary>
+        /// <param name="source">元の文字列</param>
+        /// <returns>それぞれ連続した文字をひとまとめにし、その文字と長さのペアの列を得る</returns>
+        /// <example>RunLengthEncoding("aaabccdddd") => [(a,3), (b,1), (c,2), (d,4)]</example>
+        public static IEnumerable<Tuple<string, int>> RunLengthEncoding (string source) {
+            var cutIndexes = Interval (1, source.Length)
+                .Where (i => source[i] != source[i - 1])
+                .Prepend (0)
+                .Append (source.Length);
+            return cutIndexes
+                .MapAdjacent ((i0, i1) => Tuple.Create<string, int> (source[i0].ToString (), i1 - i0));
+        }
+
+        /// <summary>
         /// 3分探索法 O(log N)
         /// </summary>
         /// <param name="l">定義域の最小値</param>
