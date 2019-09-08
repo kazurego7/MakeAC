@@ -530,6 +530,17 @@ namespace AtCoderTemplate {
         }
 
         /// <summary>
+        /// indexの列で文字列を分割する
+        /// </summary>
+        /// <param name="source">元の文字列</param>
+        /// <param name="cutIndexes">分割する位置の列</param>
+        /// <returns>分割された文字列</returns>
+        /// <example>CutForIndexes("abcdef", [0, 2, 3, 5, 6]) => ["ab", "c", "de", "f"]</example>
+        public static IEnumerable<string> CutForIndexes (string source, IEnumerable<int> cutIndexes) {
+            return cutIndexes.MapAdjacent ((i0, i1) => source.Substring (i0, i1 - i0));
+        }
+
+        /// <summary>
         /// 3分探索法 O(log N)
         /// </summary>
         /// <param name="l">定義域の最小値</param>
@@ -895,17 +906,6 @@ namespace AtCoderTemplate {
             return source.Aggregate (1, (a, b) => (int) (((long) a * b) % divisor));
         }
 
-        /// <summary>
-        /// indexの列で文字列を分割する
-        /// </summary>
-        /// <param name="source">元の文字列</param>
-        /// <param name="cutIndexes">分割する位置の列</param>
-        /// <returns>分割された文字列</returns>
-        /// <example>CutForIndexes("abcdef", [0, 2, 3, 5, 6]) => ["ab", "c", "de", "f"]</example>
-        public static IEnumerable<string> CutForIndexes (string source, IEnumerable<int> cutIndexes) {
-            return cutIndexes.MapAdjacent ((i0, i1) => source.Substring (i0, i1 - i0));
-        }
-
     }
 
     public static class MyEnumerable {
@@ -925,7 +925,7 @@ namespace AtCoderTemplate {
         /// <param name="flags">二進数によるフラグ</param>
         /// <param name="flagSize">フラグの数</param>
         /// <returns>分割するindexの位置の列</returns>
-        /// <example> CutFlagToCutIndex(10110, 5) => [0, 2, 3, 5, 6]</example>
+        /// <example> CutFlagToCutIndex(10110) => [0, 2, 3, 5, 6]</example>
         public static IEnumerable<int> CutFlagToIndexes (int flags) {
             int flagSize = (int) Log (flags, 2);
             var indexes = new List<int> { 0 };
