@@ -10,6 +10,6 @@ if exist .\content\bin\ (
 if exist .\content\obj\ (
     rd /s /q .\content\obj\
 )
-nuget pack ./AtCoderContest.Template.CSharp.nuspec -Build
+nuget pack ./AtCoderLibrary.Template.CSharp.nuspec -Build
 dotnet new -i ./*.nupkg
 popd

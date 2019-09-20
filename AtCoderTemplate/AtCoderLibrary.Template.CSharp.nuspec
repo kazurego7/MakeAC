@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>AtCoderContest.Template.CSharp</id>
+    <id>AtCoderLibrary.Template.CSharp</id>
     <version>1.16.2</version>
     <description>
-      AtCoder Contest Template
+      AtCoder Library Template
     </description>
     <authors>kazurego7</authors>
     <packageTypes>
