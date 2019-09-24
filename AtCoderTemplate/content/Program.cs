@@ -164,64 +164,71 @@ namespace AtCoderTemplate {
     }
 
     public static class MyNumericFunctions {
-        public static bool IsEven (long a) {
+
+        public static bool IsEven (int a) {
             return a % 2 == 0;
+        }
+        public static bool IsOdd (int a) {
+            return !IsEven (a);
+        }
+        public static bool IsEven (long a) {
+            return a % 2L == 0L;
         }
         public static bool IsOdd (long a) {
             return !IsEven (a);
         }
 
-        /// <summary>
-        /// 冪を得る
-        /// </summary>
-        /// <param name="b">底</param>
-        /// <param name="n">冪指数</param>
-        /// <param name="divisor">返り値がintを超えないようにdivisorで割ったあまりを得る</param>
-        /// <returns>bのn乗(をdivisorで割ったあまり)</returns>
-        public static int PowRem (long b, int n, int divisor) {
-            return Enumerable.Repeat (b, n)
-                .Aggregate (1, (accm, i) => (int) ((accm * i) % divisor));
-        }
+        // /// <summary>
+        // /// 冪を得る
+        // /// </summary>
+        // /// <param name="b">底</param>
+        // /// <param name="n">冪指数</param>
+        // /// <param name="divisor">返り値がintを超えないようにdivisorで割ったあまりを得る</param>
+        // /// <returns>bのn乗(をdivisorで割ったあまり)</returns>
+        // public static int PowRem (long b, int n, int divisor) {
+        //     return Enumerable.Repeat (b, n)
+        //         .Aggregate (1, (accm, i) => (int) ((accm * i) % divisor));
+        // }
 
-        /// <summary>
-        /// 順列の総数を得る
-        /// O(N-K)
-        /// </summary>
-        /// <param name="n">全体の数</param>
-        /// <param name="k">並べる数</param>
-        /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
-        /// <returns>nPk (をdivisorで割った余り)</returns>
-        public static int nPk (int n, int k, int divisor) {
-            if (k > n) {
-                return 0;
-            } else {
-                return Enumerable.Range (n - k + 1, k).Aggregate (1, ((i, m) => (i * m) % divisor));
-            }
-        }
+        // /// <summary>
+        // /// 順列の総数を得る
+        // /// O(N-K)
+        // /// </summary>
+        // /// <param name="n">全体の数</param>
+        // /// <param name="k">並べる数</param>
+        // /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
+        // /// <returns>nPk (をdivisorで割った余り)</returns>
+        // public static int nPk (int n, int k, int divisor) {
+        //     if (k > n) {
+        //         return 0;
+        //     } else {
+        //         return Enumerable.Range (n - k + 1, k).Aggregate (1, ((i, m) => (i * m) % divisor));
+        //     }
+        // }
 
-        /// <summary>
-        /// 階乗を得る
-        /// O(N)
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
-        /// <returns>n! (をdivisorで割った余り)</returns>
-        public static int Fact (int n, int divisor) {
-            return nPk (n, n, divisor);
-        }
+        // /// <summary>
+        // /// 階乗を得る
+        // /// O(N)
+        // /// </summary>
+        // /// <param name="n"></param>
+        // /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
+        // /// <returns>n! (をdivisorで割った余り)</returns>
+        // public static int Fact (int n, int divisor) {
+        //     return nPk (n, n, divisor);
+        // }
 
-        /// <summary>
-        /// 階乗のテーブルを得る
-        /// O(N)
-        /// </summary>
-        /// <param name="nmax"></param>
-        /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
-        /// <returns></returns>
-        public static int[] FactTable (int nmax, int divisor) {
-            return Enumerable.Range (1, nmax)
-                .Scanl (1, (accm, i) => (int) ((long) accm * i % divisor))
-                .ToArray ();
-        }
+        // /// <summary>
+        // /// 階乗のテーブルを得る
+        // /// O(N)
+        // /// </summary>
+        // /// <param name="nmax"></param>
+        // /// <param name="divisor">返り値がintを超えないようにdivisorで割った余りを得る</param>
+        // /// <returns></returns>
+        // public static int[] FactTable (int nmax, int divisor) {
+        //     return Enumerable.Range (1, nmax)
+        //         .Scanl (1, (accm, i) => (int) ((long) accm * i % divisor))
+        //         .ToArray ();
+        // }
 
         public static int[, ] PascalsTriangle (int nmax, int kmax, int divisor) {
             var comb = new int[2000 + 1, 2000 + 1];
@@ -238,6 +245,86 @@ namespace AtCoderTemplate {
             }
 
             return comb;
+        }
+        /// <summary>
+        /// Mod計算
+        /// </summary>
+        public class Mods {
+            int divisor;
+            public Mods (int divisor) {
+                this.divisor = divisor;
+            }
+            public int Mod (long a) {
+                var b = (int) (a % divisor);
+                if (b < 0) {
+                    return b + divisor;
+                } else {
+                    return b;
+                }
+            }
+
+            public int Add (int a, int b) {
+                return Mod (Mod (a) + Mod (b));
+            }
+            public int Sub (int a, int b) {
+                return Mod (Mod (a) - Mod (b));
+            }
+
+            public int Mul (int a, int b) {
+                return Mod ((long) Mod (a) * Mod (b));
+            }
+
+            public int Pow (int b, int n) {
+                var digit = (int) Math.Log (n, 2.0);
+                var pows = Interval (0, digit + 1)
+                    .Scanl (b, (accm, _) => Mul (accm, accm))
+                    .ToArray ();
+                return Interval (0, digit + 1)
+                    .Aggregate (1, (accm, i) => ((n >> i) & 1) == 1 ? Mul (accm, pows[i]) : accm);
+            }
+            public int Inv (int a) {
+                return Pow (a, divisor - 2);
+            }
+            public int Div (int a, int b) {
+                return Mul (a, Inv (b));
+            }
+
+            public int Perm (int n, int k) {
+                if (n < 0 || k < 0) throw new ArgumentOutOfRangeException ();
+
+                if (n < k) {
+                    return 0;
+                } else {
+                    return Interval (n - k + 1, n + 1)
+                        .Aggregate (1, Mul);
+                }
+            }
+
+            public List<int> FactTable (int nMax) {
+                return Interval (1, nMax + 1)
+                    .Scanl (1, Mul)
+                    .ToList ();
+            }
+
+            public List<List<int>> CombTable (int nMax) {
+                var table = Enumerable.Repeat (0, nMax + 1)
+                    .Select (_ =>
+                        Enumerable.Repeat (0, nMax + 1).ToList ()
+                    ).ToList ();
+
+                foreach (var n in Interval (0, nMax + 1)) {
+                    foreach (var k in Interval (0, nMax + 1)) {
+                        if (n < k) {
+                            table[n][k] = 0;
+                        } else if (k == 0) {
+                            table[n][k] = 1;
+                        } else {
+                            table[n][k] = Add (table[n - 1][k - 1], table[n - 1][k]);
+                        }
+                    }
+                }
+                return table;
+            }
         }
 
         /// <summary>
