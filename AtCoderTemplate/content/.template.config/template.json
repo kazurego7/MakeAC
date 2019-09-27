@@ -6,8 +6,11 @@
         "Console"
     ],
     "identity": "AtCoderLibrary.Template.CSharp",
-    "name": "AtCoderLibraryTemplate",
-    "shortName": "actemp",
+    "name": "AtCoderLibraryTemplateCSharp",
+    "shortName": "accs",
+    "tags": {
+        "language": "C#"
+    },
     "sources": [
         {
             "source": "./",
