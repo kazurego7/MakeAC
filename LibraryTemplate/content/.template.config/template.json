@@ -5,9 +5,9 @@
         "Common",
         "Console"
     ],
-    "identity": "MakeAC.Template.CSharp",
-    "name": "MakeAC-CSharp",
-    "shortName": "mkaccs",
+    "identity": "AtCoderLibrary.Template.CSharp",
+    "name": "AtCoderLibraryTemplateCSharp",
+    "shortName": "accs",
     "tags": {
         "language": "C#"
     },
@@ -45,7 +45,7 @@
     ],
     "primaryOutputs": [
         {
-            "path": "MakeAC-CSharp.csproj"
+            "path": "AtCoderContest.csproj"
         }
     ]
 }

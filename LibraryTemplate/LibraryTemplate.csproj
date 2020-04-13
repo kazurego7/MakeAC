@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageVersion>2.0</PackageVersion>
+    <PackageId>AtCoderLibrary.Template.CSharp</PackageId>
+    <Title>AtCoderLibraryTemplate for CSharp</Title>
+    <Authors>kazurego7</Authors>
+    <Description>AtCoder LibraryTemplate for CSharp</Description>
+    <PackageTags>dotnet-new;template;console;atcoder</PackageTags>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="content\**"/>
+    <Compile Remove="**\*" />
+  </ItemGroup>
+  
+</Project>
