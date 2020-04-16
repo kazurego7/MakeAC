@@ -20,6 +20,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         if (ushitapunikiakun)
         {
             Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
+            return;
         }
 
         if (Directory.Exists(contestName))
