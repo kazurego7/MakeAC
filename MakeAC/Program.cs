@@ -23,20 +23,20 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
     public void MakeAC([Option(0, "コンテスト名")]string contestName)
     {
+        Console.WriteLine("WJ... コンテスト名のディレクトリを作成します。");
+
         var invalidFileNameString = new string(Path.GetInvalidFileNameChars());
         if (invalidFileNameString.Any(invalidChar => contestName.Contains(invalidChar)))
         {
-            Console.Error.WriteLine($"WA! {contestName} に使えない文字が含まれています。");
-            Console.Error.WriteLine("以下の文字列は、コンテスト名に含むことができません。");
+            Console.Error.WriteLine("WA! 以下の文字は、コンテスト名に含むことができません。");
             Console.Error.WriteLine($"{String.Join(" ", invalidFileNameString)}");
             return;
         }
         if (Directory.Exists(contestName))
         {
-            Console.Error.WriteLine($"WA! {contestName} はすでに存在しています。別のディレクトリ名を使用してください。");
+            Console.Error.WriteLine($"WA! {contestName} ディレクトリはすでに存在しています。別のコンテスト名を使用してください。");
             return;
         }
-        Directory.CreateDirectory(contestName);
 
         var templatePath = Environment.GetEnvironmentVariable("ATCODER_TEMPLATE");
 
@@ -53,11 +53,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
+        Directory.CreateDirectory(contestName);
         foreach (var problemName in new List<string> { "A", "B", "C", "D", "E", "F" })
         {
+            Console.WriteLine($"WJ... {problemName} ディレクトリを作成します。");
+
             var problemPath = Path.Combine(contestName, problemName);
             Task.Run(() => ProcessX.StartAsync($"cp -r {templatePath}  {problemPath}").WriteLineAllAsync());
-
             var binPath = Path.Combine(problemPath, "bin");
             if (Directory.Exists(binPath))
             {
