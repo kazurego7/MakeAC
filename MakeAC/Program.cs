@@ -23,16 +23,17 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
     public void MakeAC([Option(0, "コンテスト名")]string contestName)
     {
-        var invalidPathString = new string(Path.GetInvalidPathChars());
-        if (contestName.Contains(invalidPathString))
+        var invalidFileNameString = new string(Path.GetInvalidFileNameChars());
+        if (invalidFileNameString.Any(invalidChar => contestName.Contains(invalidChar)))
         {
-            Console.Error.WriteLine($"CE! {contestName} に使えない文字が含まれています。");
+            Console.Error.WriteLine($"WA! {contestName} に使えない文字が含まれています。");
             Console.Error.WriteLine("以下の文字列は、コンテスト名に含むことができません。");
-            Console.Error.WriteLine($"{String.Join(" ", invalidPathString)}");
+            Console.Error.WriteLine($"{String.Join(" ", invalidFileNameString)}");
+            return;
         }
         if (Directory.Exists(contestName))
         {
-            Console.Error.WriteLine($"CE! {contestName} はすでに存在しています。別のディレクトリ名を使用してください。");
+            Console.Error.WriteLine($"WA! {contestName} はすでに存在しています。別のディレクトリ名を使用してください。");
             return;
         }
         Directory.CreateDirectory(contestName);
@@ -41,13 +42,15 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
         if (templatePath == "")
         {
-            Console.Error.WriteLine($"CE! ユーザー環境変数 ATCODER_TEMPLATE に利用するテンプレートプロジェクトのパスを指定してください。");
+            Console.Error.WriteLine($"WA! ユーザー環境変数 ATCODER_TEMPLATE に利用するテンプレートプロジェクトのパスを指定してください。");
+            return;
         }
 
         if (!Directory.Exists(templatePath))
         {
-            Console.Error.WriteLine($"CE! {templatePath} は存在しません。");
+            Console.Error.WriteLine($"WA! {templatePath} は存在しません。");
             Console.Error.WriteLine("ユーザー環境変数 ATCODER_TEMPLATE に利用するテンプレートプロジェクトのパスを指定してください。");
+            return;
         }
 
         foreach (var problemName in new List<string> { "A", "B", "C", "D", "E", "F" })
