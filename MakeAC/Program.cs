@@ -42,14 +42,14 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
         if (templatePath == "")
         {
-            Console.Error.WriteLine($"WA! ユーザー環境変数 ATCODER_TEMPLATE に利用するテンプレートプロジェクトのパスを指定してください。");
+            Console.Error.WriteLine($"WA! ユーザー環境変数 ATCODER_TEMPLATE に、利用するテンプレートプロジェクトのパスを指定してください。");
             return;
         }
 
         if (!Directory.Exists(templatePath))
         {
             Console.Error.WriteLine($"WA! {templatePath} は存在しません。");
-            Console.Error.WriteLine("ユーザー環境変数 ATCODER_TEMPLATE に利用するテンプレートプロジェクトのパスを指定してください。");
+            Console.Error.WriteLine("ユーザー環境変数 ATCODER_TEMPLATE に、利用するテンプレートプロジェクトのパスを指定してください。");
             return;
         }
 
