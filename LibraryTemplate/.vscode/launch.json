@@ -12,7 +12,7 @@
             "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/AtCoderContest.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
+            "console": "integratedTerminal",
             "stopAtEntry": false
         },
         {
