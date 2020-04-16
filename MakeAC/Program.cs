@@ -23,6 +23,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
     public void MakeAC([Option(0, "コンテスト名")]string contestName)
     {
+        var invalidPathString = new string(Path.GetInvalidPathChars());
+        if (contestName.Contains(invalidPathString))
+        {
+            Console.Error.WriteLine($"CE! {contestName} に使えない文字が含まれています。");
+            Console.Error.WriteLine("以下の文字列は、コンテスト名に含むことができません。");
+            Console.Error.WriteLine($"{String.Join(" ", invalidPathString)}");
+        }
         if (Directory.Exists(contestName))
         {
             Console.Error.WriteLine($"CE! {contestName} はすでに存在しています。別のディレクトリ名を使用してください。");
