@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+
 // Entrypoint, create from the .NET Core Console App.
 class Program : ConsoleAppBase // inherit ConsoleAppBase
 {
@@ -15,14 +16,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         await Host.CreateDefaultBuilder().RunConsoleAppFrameworkAsync<Program>(args);
     }
 
-    public void MakeAC([Option(0, "コンテスト名")]string contestName, [Option("uk")]bool ushitapunikiakun = false)
+    [Command(new[] { "uk", "ushitapunikiakun" })]
+    public void Ushitapunikiakun()
     {
-        if (ushitapunikiakun)
-        {
-            Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
-            return;
-        }
-
+        Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
+    }
+    public void MakeAC([Option(0, "コンテスト名")]string contestName)
+    {
         if (Directory.Exists(contestName))
         {
             Console.Error.WriteLine($"CE! {contestName} はすでに存在しています。別のディレクトリ名を使用してください。");
