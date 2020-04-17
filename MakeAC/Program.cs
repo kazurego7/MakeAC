@@ -10,8 +10,8 @@ using System.IO;
 // Entrypoint, create from the .NET Core Console App.
 class Program : ConsoleAppBase // inherit ConsoleAppBase
 {
-
-    private static string actempConfigFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".actemp");
+    private static string configFileName = ".actemp";
+    private static string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".actemp");
 
     static async Task Main(string[] args)
     {
@@ -43,11 +43,11 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
         if (Path.IsPathRooted(templatePath))
         {
-            File.WriteAllText(actempConfigFilePath, templatePath);
+            File.WriteAllText(configFilePath, templatePath);
         }
         else
         {
-            File.WriteAllText(actempConfigFilePath, Path.GetFullPath(templatePath));
+            File.WriteAllText(configFilePath, Path.GetFullPath(templatePath));
         }
 
         Console.WriteLine($"AC! {templatePath} をテンプレートとして登録しました。");
@@ -56,13 +56,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command("list", "インストールしたテンプレートの一覧")]
     public void ListTemplate()
     {
-        if (!File.Exists(actempConfigFilePath) || File.ReadAllText(actempConfigFilePath) == "")
+        if (!File.Exists(configFilePath) || File.ReadAllText(configFilePath) == "")
         {
             Console.Error.WriteLine($"WA! install コマンドで、利用するテンプレートプロジェクトのパスを指定してください。");
             return;
         }
 
-        var templatePath = File.ReadAllText(actempConfigFilePath);
+        var templatePath = File.ReadAllText(configFilePath);
 
         Console.WriteLine(templatePath);
     }
@@ -85,13 +85,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
-        if (!File.Exists(actempConfigFilePath) || File.ReadAllText(actempConfigFilePath) == "")
+        if (!File.Exists(configFilePath) || File.ReadAllText(configFilePath) == "")
         {
             Console.Error.WriteLine($"WA! install コマンドで、利用するテンプレートプロジェクトのパスを指定してください。");
             return;
         }
 
-        var templatePath = File.ReadAllText(actempConfigFilePath);
+        var templatePath = File.ReadAllText(configFilePath);
 
         Directory.CreateDirectory(contestName);
         foreach (var problemName in new List<string> { "A", "B", "C", "D", "E", "F" })
