@@ -1,0 +1,2 @@
+# https://github.com/NuGet/Home/issues/7001#issuecomment-609032468
+gci -path "./" -rec -file *.dll | Where-Object {$_.LastWriteTime -lt (Get-Date).AddYears(-20)} | %  { try { $_.LastWriteTime = '01/01/2020 00:00:00' } catch {} }
