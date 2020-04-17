@@ -11,7 +11,7 @@ using System.IO;
 class Program : ConsoleAppBase // inherit ConsoleAppBase
 {
     private static string configFileName = ".actemp";
-    private static string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".actemp");
+    private static string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), configFileName);
 
     static async Task Main(string[] args)
     {
