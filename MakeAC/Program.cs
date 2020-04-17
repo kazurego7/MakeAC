@@ -99,7 +99,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
     }
 
-    [Command("new", "コンテスト用のプロジェクト作成")]
+    [Command(new[] { "new", "create" }, "コンテスト用のプロジェクト作成")]
     public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
         if (!File.Exists(configFilePath))
