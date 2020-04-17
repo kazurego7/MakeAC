@@ -18,6 +18,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
     static async Task Main(string[] args)
     {
+        await Task.Run(() =>
+        {
+            if (!File.Exists(configFilePath))
+            {
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(new ACIgnore()));
+            }
+        });
         // target T as ConsoleAppBase.
         await Host.CreateDefaultBuilder().RunConsoleAppFrameworkAsync<Program>(args);
     }
@@ -47,38 +54,27 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
 
         var templateAbsolutePath = Path.GetFullPath(templatePath);
-
-        if (!File.Exists(configFilePath))
+        var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
+        if (!templates.ContainsKey(templateName))
         {
-            var templates = new ACIgnore();
             templates.Add(templateName, templateAbsolutePath);
             File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
             Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
         }
         else
         {
-            var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
-            if (!templates.ContainsKey(templateName))
+            Console.WriteLine($"テンプレート名 {templateName} には、{templates[templateName]} が既にインストールされています。");
+            Console.WriteLine("パスを上書きしますか？ (yes/no)");
+            var input = Console.ReadLine();
+            if (input == "yes")
             {
-                templates.Add(templateName, templateAbsolutePath);
+                templates[templateName] = templateAbsolutePath;
                 File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
-                Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
+                Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} を上書きインストールしました。");
             }
             else
             {
-                Console.WriteLine($"テンプレート名 {templateName} には、{templates[templateName]} が既にインストールされています。");
-                Console.WriteLine("パスを上書きしますか？ (yes/no)");
-                var input = Console.ReadLine();
-                if (input == "yes")
-                {
-                    templates[templateName] = templateAbsolutePath;
-                    File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
-                    Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} を上書きインストールしました。");
-                }
-                else
-                {
-                    Console.WriteLine($"テンプレート名 {templateName} を上書きせず終了しました。");
-                }
+                Console.WriteLine($"テンプレート名 {templateName} を上書きせず終了しました。");
             }
         }
     }
@@ -86,12 +82,6 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command("list", "インストールしたテンプレートの一覧")]
     public void ListTemplate()
     {
-        if (!File.Exists(configFilePath))
-        {
-            Console.Error.WriteLine($"WA! install コマンドで、テンプレートをインストールしてください。");
-            return;
-        }
-
         Console.WriteLine($"テンプレート名 : テンプレートへのパス");
         foreach (var template in JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath)))
         {
@@ -102,12 +92,6 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "new", "create" }, "コンテスト用のプロジェクト作成")]
     public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
-        if (!File.Exists(configFilePath))
-        {
-            Console.Error.WriteLine($"WA! install コマンドで、テンプレートをインストールしてください。");
-            return;
-        }
-
         var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
         if (!templates.ContainsKey(templateName))
         {
