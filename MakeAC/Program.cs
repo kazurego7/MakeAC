@@ -10,6 +10,9 @@ using System.IO;
 // Entrypoint, create from the .NET Core Console App.
 class Program : ConsoleAppBase // inherit ConsoleAppBase
 {
+
+    private static string actempConfigFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".actemp");
+
     static async Task Main(string[] args)
     {
         // target T as ConsoleAppBase.
@@ -21,7 +24,51 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     {
         Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
     }
-    public void MakeAC([Option(0, "コンテスト名")]string contestName)
+
+    [Command("install", "テンプレートのインストール")]
+    public void InstallTemplate([Option(0, "テンプレートとなるプロジェクトへのパス")]string templatePath)
+    {
+        var invalidPathString = new string(Path.GetInvalidPathChars());
+        if (invalidPathString.Any(invalidChar => templatePath.Contains(invalidChar)))
+        {
+            Console.Error.WriteLine("WA! 以下の文字は、パスに含むことができません");
+            Console.Error.WriteLine($"{String.Join(" ", invalidPathString)}");
+        }
+        if (!Directory.Exists(templatePath))
+        {
+            Console.Error.WriteLine($"WA! {templatePath} は存在しません。");
+            Console.Error.WriteLine("存在するパスを指定してください。");
+            return;
+        }
+
+        if (Path.IsPathRooted(templatePath))
+        {
+            File.WriteAllText(actempConfigFilePath, templatePath);
+        }
+        else
+        {
+            File.WriteAllText(actempConfigFilePath, Path.GetFullPath(templatePath));
+        }
+
+        Console.WriteLine($"AC! {templatePath} をテンプレートとして登録しました。");
+    }
+
+    [Command("list", "インストールしたテンプレートの一覧")]
+    public void ListTemplate()
+    {
+        if (!File.Exists(actempConfigFilePath) || File.ReadAllText(actempConfigFilePath) == "")
+        {
+            Console.Error.WriteLine($"WA! install コマンドで、利用するテンプレートプロジェクトのパスを指定してください。");
+            return;
+        }
+
+        var templatePath = File.ReadAllText(actempConfigFilePath);
+
+        Console.WriteLine(templatePath);
+    }
+
+    [Command("create", "コンテスト用のプロジェクト作成")]
+    public void CreateContestProjects([Option(0, "コンテスト名")]string contestName)
     {
         Console.WriteLine("WJ... コンテスト名のディレクトリを作成します。");
 
@@ -38,20 +85,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
-        var templatePath = Environment.GetEnvironmentVariable("ATCODER_TEMPLATE");
-
-        if (templatePath == "")
+        if (!File.Exists(actempConfigFilePath) || File.ReadAllText(actempConfigFilePath) == "")
         {
-            Console.Error.WriteLine($"WA! ユーザー環境変数 ATCODER_TEMPLATE に、利用するテンプレートプロジェクトのパスを指定してください。");
+            Console.Error.WriteLine($"WA! install コマンドで、利用するテンプレートプロジェクトのパスを指定してください。");
             return;
         }
 
-        if (!Directory.Exists(templatePath))
-        {
-            Console.Error.WriteLine($"WA! {templatePath} は存在しません。");
-            Console.Error.WriteLine("ユーザー環境変数 ATCODER_TEMPLATE に、利用するテンプレートプロジェクトのパスを指定してください。");
-            return;
-        }
+        var templatePath = File.ReadAllText(actempConfigFilePath);
 
         Directory.CreateDirectory(contestName);
         foreach (var problemName in new List<string> { "A", "B", "C", "D", "E", "F" })
