@@ -100,16 +100,6 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
             var problemPath = Path.Combine(contestName, problemName);
             Task.Run(() => ProcessX.StartAsync($"cp -r {templatePath}  {problemPath}").WriteLineAllAsync());
-            var binPath = Path.Combine(problemPath, "bin");
-            if (Directory.Exists(binPath))
-            {
-                Directory.Delete(binPath, true);
-            }
-            var objPath = Path.Combine(problemPath, "obj");
-            if (Directory.Exists(objPath))
-            {
-                Directory.Delete(objPath, true);
-            }
         }
 
         Console.WriteLine("AC! コンテスト用の各問題プロジェクトの作成が完了しました。");
