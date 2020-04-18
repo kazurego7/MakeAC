@@ -78,6 +78,28 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
     }
 
+    [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートのアンインストール")]
+    public void UninstallTemplate([Option(0, "テンプレート名")]string templateName)
+    {
+        var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
+        if (!templates.ContainsKey(templateName))
+        {
+            Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
+            Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
+
+            Console.WriteLine($"テンプレート名 : テンプレートへのパス");
+            foreach (var template in templates)
+            {
+                Console.WriteLine($"{template.Key} : {template.Value}");
+            }
+            return;
+        }
+
+        templates.Remove(templateName);
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
+        Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
+    }
+
     [Command(new[] { "list", "ls", }, "インストールしたテンプレートの一覧")]
     public void ListTemplate()
     {
@@ -94,7 +116,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
         if (!templates.ContainsKey(templateName))
         {
-            Console.Error.WriteLine($"WA! {templateName} がテンプレートに存在しません。");
+            Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
