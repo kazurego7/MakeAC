@@ -112,7 +112,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.Error.WriteLine($"    {String.Join(" ", invalidFileNameString)}");
             return;
         }
-        if (Directory.Exists(contestName))
+        if (Directory.Exists(contestName) || File.Exists(contestName))
         {
             Console.Error.WriteLine($"WA! {contestName} はすでに存在しています。別のコンテスト名を使用してください。");
             return;
