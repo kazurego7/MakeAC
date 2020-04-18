@@ -30,13 +30,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command(new[] { "ushitapunikiakun", "uk", }, "????????????")]
-    public void Ushitapunikiakun()
+    public void UshitapunikiakunCommand()
     {
         Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
     }
 
     [Command(new[] { "install", "i", }, "テンプレートのインストール")]
-    public void InstallTemplate([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
+    public void InstallCommand([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
     {
         var invalidPathString = new string(Path.GetInvalidPathChars());
         if (invalidPathString.Any(invalidChar => templatePath.Contains(invalidChar)))
@@ -84,7 +84,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートのアンインストール")]
-    public void UninstallTemplate([Option(0, "テンプレート名")]string templateName)
+    public void UninstallCommand([Option(0, "テンプレート名")]string templateName)
     {
         var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
         ShowNotExistTemplateNameError(templateName);
@@ -95,17 +95,20 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command(new[] { "list", "ls", }, "インストールしたテンプレートの一覧")]
-    public void ListTemplate()
+    public void ListCommand([Option("r", "アンインストールしたテンプレートを表示するか")]bool remove = false)
     {
-        Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-        foreach (var template in JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath)).templates)
+        if (remove)
         {
-            Console.WriteLine($"{template.Key} : {template.Value.path}");
+            ListUninstalledTemplate();
+        }
+        else
+        {
+            ListInstalledTemplate();
         }
     }
 
     [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
-    public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
+    public void CreateCommand([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
         var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
         ShowNotExistTemplateNameError(templateName);
@@ -144,15 +147,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         Console.WriteLine("AC! コンテスト用の各問題プロジェクトの作成が完了しました。");
     }
 
-    private void ListTemplate(string templateName)
+    private void ListInstalledTemplate()
     {
+
         Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-        foreach (var template in templateConfig.templates)
+        foreach (var template in templateConfig.templates.Where(keyValue => keyValue.Value.removeFlag))
         {
-            if (!template.Value.removeFlag)
-            {
-                Console.WriteLine($"{template.Key} : {template.Value.path}");
-            }
+            Console.WriteLine($"{template.Key} : {template.Value.path}");
         }
     }
 
@@ -163,7 +164,28 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
-            ListTemplate(templateName);
+            ListInstalledTemplate();
+            return;
+        }
+    }
+
+    private void ListUninstalledTemplate()
+    {
+        Console.WriteLine($"削除されたテンプレート名 : テンプレートへのパス");
+        foreach (var template in templateConfig.templates.Where(keyValue => !keyValue.Value.removeFlag))
+        {
+            Console.WriteLine($"{template.Key} : {template.Value.path}");
+        }
+    }
+
+    private void ShowNotExistUninstalledTemplateNameError(string templateName)
+    {
+        if (!templateConfig.templates.ContainsKey(templateName) || !templateConfig.templates[templateName].removeFlag)
+        {
+            Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
+            Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
+
+            ListUninstalledTemplate();
             return;
         }
     }
