@@ -35,12 +35,12 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command("install", "テンプレートのインストール")]
-    public void InstallTemplate([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートとなるプロジェクトへのパス")]string templatePath)
+    public void InstallTemplate([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
     {
         var invalidPathString = new string(Path.GetInvalidPathChars());
         if (invalidPathString.Any(invalidChar => templatePath.Contains(invalidChar)))
         {
-            Console.Error.WriteLine($"WA! 以下の文字は、テンプレートとなるプロジェクトへのパスに含むことができません。");
+            Console.Error.WriteLine($"WA! 以下の文字は、テンプレートへのパスに含むことができません。");
             Console.Error.WriteLine($"    {String.Join(" ", invalidPathString)}");
             return;
         }
@@ -48,7 +48,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         if (!Directory.Exists(templatePath))
         {
             Console.Error.WriteLine($"WA! {templatePath} は存在しません。");
-            Console.Error.WriteLine($"    存在するパスを指定してください。");
+            Console.Error.WriteLine($"    存在するテンプレートへのパスを指定してください。");
             return;
         }
 
@@ -62,8 +62,8 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
         else
         {
-            Console.WriteLine($"テンプレート名 {templateName} には、{templates[templateName]} が既にインストールされています。");
-            Console.WriteLine("パスを上書きしますか？ (yes/no)");
+            Console.WriteLine($"テンプレート名 {templateName} には、テンプレートへのパス {templates[templateName]} が既にインストールされています。");
+            Console.WriteLine("テンプレートへのパスを上書きしますか？ (yes/no)");
             var input = Console.ReadLine();
             if (input == "yes")
             {
@@ -114,14 +114,14 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
         if (Directory.Exists(contestName))
         {
-            Console.Error.WriteLine($"WA! {contestName} ディレクトリはすでに存在しています。別のコンテスト名を使用してください。");
+            Console.Error.WriteLine($"WA! {contestName} はすでに存在しています。別のコンテスト名を使用してください。");
             return;
         }
 
         if (!Directory.Exists(templates[templateName]))
         {
-            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templates[templateName]} にテンプレートとなるディレクトリが存在しません。");
-            Console.Error.WriteLine($"    install コマンドでパスを修正してください。");
+            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templates[templateName]} に、テンプレートが存在しません。");
+            Console.Error.WriteLine($"    install コマンドで、テンプレートへのパスを修正してください。");
             return;
         }
 
