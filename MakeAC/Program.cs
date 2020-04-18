@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text.Json;
-
-using ACTemp = System.Collections.Generic.Dictionary<System.String, System.String>;
-
 // Entrypoint, create from the .NET Core Console App.
 class Program : ConsoleAppBase // inherit ConsoleAppBase
 {
@@ -21,7 +18,9 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         {
             if (!File.Exists(configFilePath))
             {
-                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(new ACTemp()));
+                var actemplateCofig = new ACTemplateConfig();
+                actemplateCofig.templates = new Dictionary<string, ACTemplate>();
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(actemplateCofig));
             }
         });
         // target T as ConsoleAppBase.
@@ -51,24 +50,23 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.Error.WriteLine($"    存在するテンプレートへのパスを指定してください。");
             return;
         }
-
         var templateAbsolutePath = Path.GetFullPath(templatePath);
-        var templates = JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath));
-        if (!templates.ContainsKey(templateName))
+        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        if (!templateConfig.templates.ContainsKey(templateName))
         {
-            templates.Add(templateName, templateAbsolutePath);
-            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(templates));
+            templateConfig.templates.Add(templateName, new ACTemplate { path = templateAbsolutePath, removeFlag = false });
+            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
             Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
         }
         else
         {
-            Console.WriteLine($"テンプレート名 {templateName} には、テンプレートへのパス {templates[templateName]} が既にインストールされています。");
+            Console.WriteLine($"テンプレート名 {templateName} には、テンプレートへのパス {templateConfig.templates[templateName]} が既にインストールされています。");
             Console.WriteLine("テンプレートへのパスを上書きしますか？ (yes/no)");
             var input = Console.ReadLine();
             if (input == "yes")
             {
-                templates[templateName] = templateAbsolutePath;
-                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(templates));
+                templateConfig.templates[templateName] = new ACTemplate { path = templateAbsolutePath, removeFlag = false };
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
                 Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} を上書きインストールしました。");
             }
             else
@@ -81,22 +79,22 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートのアンインストール")]
     public void UninstallTemplate([Option(0, "テンプレート名")]string templateName)
     {
-        var templates = JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath));
-        if (!templates.ContainsKey(templateName))
+        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        if (!templateConfig.templates.ContainsKey(templateName))
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-            foreach (var template in templates)
+            foreach (var template in templateConfig.templates)
             {
-                Console.WriteLine($"{template.Key} : {template.Value}");
+                Console.WriteLine($"{template.Key} : {template.Value.path}");
             }
             return;
         }
 
-        templates.Remove(templateName);
-        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(templates));
+        templateConfig.templates.Remove(templateName);
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
         Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
     }
 
@@ -104,25 +102,25 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     public void ListTemplate()
     {
         Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-        foreach (var template in JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath)))
+        foreach (var template in JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath)).templates)
         {
-            Console.WriteLine($"{template.Key} : {template.Value}");
+            Console.WriteLine($"{template.Key} : {template.Value.path}");
         }
     }
 
     [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
     public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
-        var templates = JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath));
-        if (!templates.ContainsKey(templateName))
+        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        if (!templateConfig.templates.ContainsKey(templateName))
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-            foreach (var template in templates)
+            foreach (var template in templateConfig.templates)
             {
-                Console.WriteLine($"{template.Key} : {template.Value}");
+                Console.WriteLine($"{template.Key} : {template.Value.path}");
             }
             return;
         }
@@ -140,9 +138,9 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
-        if (!Directory.Exists(templates[templateName]))
+        if (!Directory.Exists(templateConfig.templates[templateName].path))
         {
-            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templates[templateName]} に、テンプレートが存在しません。");
+            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templateConfig.templates[templateName]} に、テンプレートが存在しません。");
             Console.Error.WriteLine($"    install コマンドで、テンプレートへのパスを修正してください。");
             return;
         }
@@ -155,7 +153,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.WriteLine($"WJ... {problemName} ディレクトリを作成します。");
 
             var problemPath = Path.Combine(contestName, problemName);
-            DirectoryEx.Copy(templates[templateName], problemPath);
+            DirectoryEx.Copy(templateConfig.templates[templateName].path, problemPath);
         }
 
         Console.WriteLine("AC! コンテスト用の各問題プロジェクトの作成が完了しました。");
