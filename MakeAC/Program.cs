@@ -104,11 +104,11 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
     }
 
-    [Command(new[] { "list", "ls", }, "インストールしたテンプレートの一覧")]
-    public void ListCommand([Option("r", "アンインストールしたテンプレートを表示するか")]bool remove = false)
+    [Command(new[] { "list", "ls", }, "テンプレートの一覧")]
+    public void ListCommand([Option("r", "アンインストールしたテンプレートを表示する")]bool remove = false)
     {
         var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
-        if (remove)
+        if (!remove)
         {
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
             foreach (var template in templateConfig.templates.Where(keyValue => !keyValue.Value.removeFlag))
@@ -118,12 +118,35 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
         else
         {
-            Console.WriteLine($"削除されたテンプレート名 : テンプレートへのパス");
+            Console.WriteLine($"アンインストールしたテンプレート名 : テンプレートへのパス");
             foreach (var template in templateConfig.templates.Where(keyValue => keyValue.Value.removeFlag))
             {
                 Console.WriteLine($"{template.Key} : {template.Value.path}");
             }
         }
+    }
+
+    [Command(new[] { "restore", "rs", }, "アンインストールしたテンプレートの復元")]
+    public void RestoreCommand([Option(0, "テンプレート名")]string templateName)
+    {
+        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+
+        if (!templateConfig.templates.ContainsKey(templateName) || !templateConfig.templates[templateName].removeFlag)
+        {
+            Console.Error.WriteLine($"WA! {templateName} がアンインストールしたテンプレート名に存在しません。");
+            Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
+
+            Console.WriteLine($"アンインストールしたテンプレート名 : テンプレートへのパス");
+            foreach (var template in templateConfig.templates.Where(keyValue => keyValue.Value.removeFlag))
+            {
+                Console.WriteLine($"{template.Key} : {template.Value.path}");
+            }
+            return;
+        }
+
+        templateConfig.templates[templateName].removeFlag = false;
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+        Console.WriteLine($"AC! テンプレート {templateName} : {templateConfig.templates[templateName].path} を復元しました");
     }
 
     [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
