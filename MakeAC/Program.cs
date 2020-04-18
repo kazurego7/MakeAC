@@ -28,13 +28,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         await Host.CreateDefaultBuilder().RunConsoleAppFrameworkAsync<Program>(args);
     }
 
-    [Command(new[] { "uk", "ushitapunikiakun" })]
+    [Command(new[] { "ushitapunikiakun", "uk", }, "????????????")]
     public void Ushitapunikiakun()
     {
         Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
     }
 
-    [Command("install", "テンプレートのインストール")]
+    [Command(new[] { "install", "i", }, "テンプレートのインストール")]
     public void InstallTemplate([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
     {
         var invalidPathString = new string(Path.GetInvalidPathChars());
@@ -78,7 +78,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
     }
 
-    [Command("list", "インストールしたテンプレートの一覧")]
+    [Command(new[] { "list", "ls", }, "インストールしたテンプレートの一覧")]
     public void ListTemplate()
     {
         Console.WriteLine($"テンプレート名 : テンプレートへのパス");
@@ -88,7 +88,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
     }
 
-    [Command(new[] { "new", "create" }, "コンテスト用のプロジェクト作成")]
+    [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
     public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
         var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
