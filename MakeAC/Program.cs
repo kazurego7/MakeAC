@@ -118,6 +118,13 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
+        if (!Directory.Exists(templates[templateName]))
+        {
+            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templates[templateName]} にテンプレートとなるディレクトリが存在しません。");
+            Console.Error.WriteLine("install コマンドでパスを修正してください。");
+            return;
+        }
+
         Console.WriteLine("WJ... コンテスト名のディレクトリを作成します。");
 
         Directory.CreateDirectory(contestName);
