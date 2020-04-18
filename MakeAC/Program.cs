@@ -140,7 +140,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
         if (!Directory.Exists(templateConfig.templates[templateName].path))
         {
-            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templateConfig.templates[templateName]} に、テンプレートが存在しません。");
+            Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templateConfig.templates[templateName].path} に、テンプレートが存在しません。");
             Console.Error.WriteLine($"    install コマンドで、テンプレートへのパスを修正してください。");
             return;
         }
