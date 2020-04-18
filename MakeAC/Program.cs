@@ -58,6 +58,12 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
             Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
         }
+        else if (templateConfig.templates[templateName].removeFlag)
+        {
+            templateConfig.templates[templateName].removeFlag = false;
+            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+            Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
+        }
         else
         {
             Console.WriteLine($"テンプレート名 {templateName} には、テンプレートへのパス {templateConfig.templates[templateName]} が既にインストールされています。");
@@ -80,7 +86,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     public void UninstallTemplate([Option(0, "テンプレート名")]string templateName)
     {
         var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
-        if (!templateConfig.templates.ContainsKey(templateName))
+        if (!templateConfig.templates.ContainsKey(templateName) || templateConfig.templates[templateName].removeFlag)
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
@@ -93,7 +99,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
-        templateConfig.templates.Remove(templateName);
+        templateConfig.templates[templateName].removeFlag = true;
         File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
         Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
     }
@@ -112,7 +118,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
         var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
-        if (!templateConfig.templates.ContainsKey(templateName))
+        if (!templateConfig.templates.ContainsKey(templateName) || templateConfig.templates[templateName].removeFlag)
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
