@@ -7,7 +7,7 @@ using System.Linq;
 using System.IO;
 using System.Text.Json;
 
-using ACIgnore = System.Collections.Generic.Dictionary<System.String, System.String>;
+using ACTemp = System.Collections.Generic.Dictionary<System.String, System.String>;
 
 // Entrypoint, create from the .NET Core Console App.
 class Program : ConsoleAppBase // inherit ConsoleAppBase
@@ -21,7 +21,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         {
             if (!File.Exists(configFilePath))
             {
-                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(new ACIgnore()));
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(new ACTemp()));
             }
         });
         // target T as ConsoleAppBase.
@@ -53,11 +53,11 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
 
         var templateAbsolutePath = Path.GetFullPath(templatePath);
-        var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
+        var templates = JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath));
         if (!templates.ContainsKey(templateName))
         {
             templates.Add(templateName, templateAbsolutePath);
-            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
+            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(templates));
             Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
         }
         else
@@ -68,7 +68,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             if (input == "yes")
             {
                 templates[templateName] = templateAbsolutePath;
-                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(templates));
                 Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} を上書きインストールしました。");
             }
             else
@@ -81,7 +81,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートのアンインストール")]
     public void UninstallTemplate([Option(0, "テンプレート名")]string templateName)
     {
-        var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
+        var templates = JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath));
         if (!templates.ContainsKey(templateName))
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
@@ -96,7 +96,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
 
         templates.Remove(templateName);
-        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACIgnore>(templates));
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemp>(templates));
         Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
     }
 
@@ -104,7 +104,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     public void ListTemplate()
     {
         Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-        foreach (var template in JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath)))
+        foreach (var template in JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath)))
         {
             Console.WriteLine($"{template.Key} : {template.Value}");
         }
@@ -113,7 +113,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
     public void CreateContestProjects([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
-        var templates = JsonSerializer.Deserialize<ACIgnore>(File.ReadAllText(configFilePath));
+        var templates = JsonSerializer.Deserialize<ACTemp>(File.ReadAllText(configFilePath));
         if (!templates.ContainsKey(templateName))
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
