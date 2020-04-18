@@ -1,4 +1,5 @@
 using System.IO;
+using static DirectoryInfoEx;
 
 public static class DirectoryEx
 {

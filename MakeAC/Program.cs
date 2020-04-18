@@ -1,6 +1,5 @@
 ﻿using ConsoleAppFramework;
 using Microsoft.Extensions.Hosting;
-using Cysharp.Diagnostics;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -127,7 +126,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.WriteLine($"WJ... {problemName} ディレクトリを作成します。");
 
             var problemPath = Path.Combine(contestName, problemName);
-            Task.Run(() => ProcessX.StartAsync($"cp -r {templates[templateName]}  {problemPath}").WriteLineAllAsync());
+            DirectoryEx.Copy(templates[templateName], problemPath);
         }
 
         Console.WriteLine("AC! コンテスト用の各問題プロジェクトの作成が完了しました。");
