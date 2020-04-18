@@ -40,15 +40,15 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         var invalidPathString = new string(Path.GetInvalidPathChars());
         if (invalidPathString.Any(invalidChar => templatePath.Contains(invalidChar)))
         {
-            Console.Error.WriteLine("WA! 以下の文字は、テンプレートとなるプロジェクトへのパスに含むことができません。");
-            Console.Error.WriteLine($"{String.Join(" ", invalidPathString)}");
+            Console.Error.WriteLine($"WA! 以下の文字は、テンプレートとなるプロジェクトへのパスに含むことができません。");
+            Console.Error.WriteLine($"    {String.Join(" ", invalidPathString)}");
             return;
         }
 
         if (!Directory.Exists(templatePath))
         {
             Console.Error.WriteLine($"WA! {templatePath} は存在しません。");
-            Console.Error.WriteLine("存在するパスを指定してください。");
+            Console.Error.WriteLine($"    存在するパスを指定してください。");
             return;
         }
 
@@ -95,7 +95,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         if (!templates.ContainsKey(templateName))
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレートに存在しません。");
-            Console.Error.WriteLine("テンプレート一覧を確認してください。");
+            Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
             foreach (var template in templates)
@@ -108,8 +108,8 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         var invalidFileNameString = new string(Path.GetInvalidFileNameChars());
         if (invalidFileNameString.Any(invalidChar => contestName.Contains(invalidChar)))
         {
-            Console.Error.WriteLine("WA! 以下の文字は、コンテスト名に含むことができません。");
-            Console.Error.WriteLine($"{String.Join(" ", invalidFileNameString)}");
+            Console.Error.WriteLine($"WA! 以下の文字は、コンテスト名に含むことができません。");
+            Console.Error.WriteLine($"    {String.Join(" ", invalidFileNameString)}");
             return;
         }
         if (Directory.Exists(contestName))
@@ -121,7 +121,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         if (!Directory.Exists(templates[templateName]))
         {
             Console.Error.WriteLine($"CE! テンプレート名 {templateName} のパス {templates[templateName]} にテンプレートとなるディレクトリが存在しません。");
-            Console.Error.WriteLine("install コマンドでパスを修正してください。");
+            Console.Error.WriteLine($"    install コマンドでパスを修正してください。");
             return;
         }
 
