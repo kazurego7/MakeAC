@@ -5,7 +5,7 @@
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
