@@ -18,9 +18,9 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         {
             if (!File.Exists(configFilePath))
             {
-                var actemplateCofig = new ACTemplateConfig();
-                actemplateCofig.templates = new Dictionary<string, ACTemplate>();
-                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(actemplateCofig));
+                var actemplateCofig = new TemplateConfigDAO();
+                actemplateCofig.templates = new Dictionary<string, TemplateDAO>();
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(actemplateCofig));
             }
         });
         // target T as ConsoleAppBase.
@@ -36,7 +36,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "install", "i", }, "テンプレートのインストール")]
     public void InstallCommand([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
     {
-        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        var templateConfig = JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
         var invalidPathString = new string(Path.GetInvalidPathChars());
         if (invalidPathString.Any(invalidChar => templatePath.Contains(invalidChar)))
         {
@@ -54,14 +54,14 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         var templateAbsolutePath = Path.GetFullPath(templatePath);
         if (!templateConfig.templates.ContainsKey(templateName))
         {
-            templateConfig.templates.Add(templateName, new ACTemplate { path = templateAbsolutePath, removeFlag = false });
-            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+            templateConfig.templates.Add(templateName, new TemplateDAO { path = templateAbsolutePath, removeFlag = false });
+            File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(templateConfig));
             Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
         }
         else if (templateConfig.templates[templateName].removeFlag)
         {
             templateConfig.templates[templateName].removeFlag = false;
-            File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+            File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(templateConfig));
             Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} をインストールしました。");
         }
         else
@@ -71,8 +71,8 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             var input = Console.ReadLine();
             if (input == "yes")
             {
-                templateConfig.templates[templateName] = new ACTemplate { path = templateAbsolutePath, removeFlag = false };
-                File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+                templateConfig.templates[templateName] = new TemplateDAO { path = templateAbsolutePath, removeFlag = false };
+                File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(templateConfig));
                 Console.WriteLine($"AC! テンプレート名 {templateName} に、{templateAbsolutePath} を上書きインストールしました。");
             }
             else
@@ -85,7 +85,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートのアンインストール")]
     public void RemoveCommand([Option(0, "テンプレート名")]string templateName)
     {
-        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        var templateConfig = JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
         if (!templateConfig.templates.ContainsKey(templateName) || templateConfig.templates[templateName].removeFlag)
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
@@ -100,14 +100,14 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
 
         templateConfig.templates[templateName].removeFlag = true;
-        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(templateConfig));
         Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
     }
 
     [Command(new[] { "list", "ls", }, "テンプレートの一覧")]
     public void ListCommand([Option("r", "アンインストールしたテンプレートを表示する")]bool remove = false)
     {
-        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        var templateConfig = JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
         if (!remove)
         {
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
@@ -129,7 +129,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     [Command(new[] { "restore", "rs", }, "アンインストールしたテンプレートの復元")]
     public void RestoreCommand([Option(0, "テンプレート名")]string templateName)
     {
-        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        var templateConfig = JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
 
         if (!templateConfig.templates.ContainsKey(templateName) || !templateConfig.templates[templateName].removeFlag)
         {
@@ -145,14 +145,14 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
 
         templateConfig.templates[templateName].removeFlag = false;
-        File.WriteAllText(configFilePath, JsonSerializer.Serialize<ACTemplateConfig>(templateConfig));
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(templateConfig));
         Console.WriteLine($"AC! テンプレート {templateName} : {templateConfig.templates[templateName].path} を復元しました");
     }
 
     [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
     public void CreateCommand([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
     {
-        var templateConfig = JsonSerializer.Deserialize<ACTemplateConfig>(File.ReadAllText(configFilePath));
+        var templateConfig = JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
         if (!templateConfig.templates.ContainsKey(templateName) || templateConfig.templates[templateName].removeFlag)
         {
             Console.Error.WriteLine($"WA! {templateName} がテンプレート名に存在しません。");
