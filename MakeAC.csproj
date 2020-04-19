@@ -6,9 +6,10 @@
 
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mkac</ToolCommandName>
-    <PackageDescription>競技プログラミング用のテンプレート生成ツール</PackageDescription>
-    <Version>1.0.1</Version>
+    <PackageDescription>競技プログラミング(AtCoder)用のテンプレート生成ツール</PackageDescription>
+    <Version>1.0.3</Version>
     <Authors>kazurego7</Authors>
+    <RepositoryUrl>https://github.com/kazurego7/MakeAC</RepositoryUrl>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
   
