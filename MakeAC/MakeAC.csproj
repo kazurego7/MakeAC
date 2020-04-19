@@ -6,12 +6,14 @@
 
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mkac</ToolCommandName>
+    <PackageDescription>競技プログラミング用のテンプレート生成ツール</PackageDescription>
+    <Version>1.0.1</Version>
+    <Authors>kazurego7</Authors>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="ConsoleAppFramework" Version="2.2.0" />
-    <PackageReference Include="ProcessX" Version="1.2.0" />
     <PackageReference Include="System.Interactive.Async" Version="4.1.1" />
   </ItemGroup>
 
