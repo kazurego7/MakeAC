@@ -26,7 +26,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         Console.Error.WriteLine("う　し　た　ぷ　に　き　あ　く　ん　（笑）");
     }
 
-    [Command(new[] { "install", "i", }, "テンプレートのインストール")]
+    [Command(new[] { "install", "i", }, "テンプレートの登録")]
     public void InstallCommand([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
     {
         var templateConfig = new TemplateConfig();
@@ -50,18 +50,18 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         {
             templateConfig.Add(template);
             templateConfig.Write();
-            Console.WriteLine($"AC! テンプレート名 {template.name} に、{template.path} をインストールしました。");
+            Console.WriteLine($"AC! テンプレート名 {template.name} に、{template.path} を登録しました。");
         }
         else
         {
-            Console.WriteLine($"テンプレート名 {template.name} には、テンプレートへのパス {templateConfig.Get(template.name).path} が既にインストールされています。");
+            Console.WriteLine($"テンプレート名 {template.name} には、テンプレートへのパス {templateConfig.Get(template.name).path} が既に登録されています。");
             Console.WriteLine("テンプレートへのパスを上書きしますか？ (yes/no)");
             var input = Console.ReadLine();
             if (input == "yes")
             {
                 templateConfig.Add(template);
                 templateConfig.Write();
-                Console.WriteLine($"AC! テンプレート名 {template.name} に、{template.path} を上書きインストールしました。");
+                Console.WriteLine($"AC! テンプレート名 {template.name} に、{template.path} を上書き登録しました。");
             }
             else
             {
@@ -70,7 +70,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
     }
 
-    [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートのアンインストール")]
+    [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートの登録解除")]
     public void RemoveCommand([Option(0, "テンプレート名")]string templateName)
     {
         var templateConfig = new TemplateConfig();
@@ -89,11 +89,11 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
         templateConfig.Remove(templateName);
         templateConfig.Write();
-        Console.WriteLine($"AC! テンプレート名 {templateName} をアンインストールしました。");
+        Console.WriteLine($"AC! テンプレート名 {templateName} を登録解除しました。");
     }
 
     [Command(new[] { "list", "ls", }, "テンプレートの一覧")]
-    public void ListCommand([Option("r", "アンインストールしたテンプレートを表示する")]bool removed = false)
+    public void ListCommand([Option("r", "登録解除したテンプレートを表示する")]bool removed = false)
     {
         var templateConfig = new TemplateConfig();
         if (!removed)
@@ -106,7 +106,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
         else
         {
-            Console.WriteLine($"アンインストールしたテンプレート名 : テンプレートへのパス");
+            Console.WriteLine($"登録解除したテンプレート名 : テンプレートへのパス");
             foreach (var template in templateConfig.ListRemovedTemplate())
             {
                 Console.WriteLine($"{template.name} : {template.path}");
@@ -114,17 +114,17 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         }
     }
 
-    [Command(new[] { "restore", "rs", }, "アンインストールしたテンプレートの復元")]
+    [Command(new[] { "restore", "rs", }, "登録解除したテンプレートの復元")]
     public void RestoreCommand([Option(0, "テンプレート名")]string templateName)
     {
         var templateConfig = new TemplateConfig();
 
         if (!templateConfig.IsRemoved(templateName))
         {
-            Console.Error.WriteLine($"WA! {templateName} がアンインストールしたテンプレート名に存在しません。");
+            Console.Error.WriteLine($"WA! {templateName} が登録解除したテンプレート名に存在しません。");
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
-            Console.WriteLine($"アンインストールしたテンプレート名 : テンプレートへのパス");
+            Console.WriteLine($"登録解除したテンプレート名 : テンプレートへのパス");
             foreach (var template in templateConfig.ListRemovedTemplate())
             {
                 Console.WriteLine($"{template.name} : {template.path}");
@@ -186,6 +186,6 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             DirectoryEx.Copy(template.path, problemPath);
         }
 
-        Console.WriteLine("AC! コンテスト用の各問題プロジェクトの作成が完了しました。");
+        Console.WriteLine("AC! コンテスト用の各問題の作成が完了しました。");
     }
 }
