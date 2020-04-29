@@ -27,7 +27,11 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command(new[] { "install", "i", }, "テンプレートの登録")]
-    public void InstallCommand([Option(0, "テンプレート名")]string templateName, [Option(1, "テンプレートへのパス")]string templatePath)
+    public void InstallCommand(
+        [Option(0, "テンプレート名")]string templateName,
+        [Option(1, "テンプレートへのパス")]string templatePath,
+        [Option("u", "テンプレートを上書き登録する")]bool update = false
+        )
     {
         var templateConfig = new TemplateConfig();
         var invalidPathString = new string(Path.GetInvalidPathChars());
@@ -45,27 +49,39 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             return;
         }
 
-        var template = new Template { name = templateName, path = Path.GetFullPath(templatePath) };
-        if (!templateConfig.IsInstalled(template.name))
+        var installTemplate = new Template { name = templateName, path = Path.GetFullPath(templatePath) };
+
+        if (update)
         {
-            templateConfig.Add(template);
-            templateConfig.Write();
-            Console.WriteLine($"AC! テンプレート名 {template.name} に、{template.path} を登録しました。");
-        }
-        else
-        {
-            Console.WriteLine($"テンプレート名 {template.name} には、テンプレートへのパス {templateConfig.Get(template.name).path} が既に登録されています。");
-            Console.WriteLine("テンプレートへのパスを上書きしますか？ (yes/no)");
-            var input = Console.ReadLine();
-            if (input == "yes")
+            if (!templateConfig.IsInstalled(installTemplate.name))
             {
-                templateConfig.Add(template);
-                templateConfig.Write();
-                Console.WriteLine($"AC! テンプレート名 {template.name} に、{template.path} を上書き登録しました。");
+                Console.Error.WriteLine($"WA! テンプレート名 {installTemplate.name} は登録されていません。");
+                Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
+                Console.WriteLine($"テンプレート名 : テンプレートへのパス");
+                foreach (var template in templateConfig.ListInstalledTemplate())
+                {
+                    Console.WriteLine($"{template.name} : {template.path}");
+                }
             }
             else
             {
-                Console.WriteLine($"テンプレート名 {template.name} を上書きせず終了しました。");
+                templateConfig.Update(installTemplate);
+                templateConfig.Write();
+                Console.WriteLine($"AC! テンプレート名 {installTemplate.name} に、{installTemplate.path} を上書き登録しました。");
+            }
+        }
+        else
+        {
+            if (templateConfig.IsInstalled(installTemplate.name))
+            {
+                Console.Error.WriteLine($"WA! テンプレート名 {installTemplate.name} には、テンプレートへのパス {templateConfig.Get(installTemplate.name).path} が既に登録されています。");
+                Console.Error.WriteLine($"    -update オプションで、テンプレートの上書き登録を行うことができます。");
+            }
+            else
+            {
+                templateConfig.Add(installTemplate);
+                templateConfig.Write();
+                Console.WriteLine($"AC! テンプレート名 {installTemplate.name} に、{installTemplate.path} を登録しました。");
             }
         }
     }
@@ -171,7 +187,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
         {
             var template = templateConfig.Get(templateName);
             Console.Error.WriteLine($"CE! テンプレート名 {template.name} のパス {template.path} に、テンプレートが存在しません。");
-            Console.Error.WriteLine($"    install コマンドで、テンプレートへのパスを修正してください。");
+            Console.Error.WriteLine($"    install コマンドと -update オプションで、修正したテンプレートへのパスを上書き登録してください。");
             return;
         }
 

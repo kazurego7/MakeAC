@@ -49,16 +49,14 @@ public class TemplateConfig
 
     public void Add(Template template)
     {
-        if (TemplateConfigDAOCache.templates.ContainsKey(template.name))
-        {
-            TemplateConfigDAOCache.templates[template.name] = new TemplateDAO { path = template.path, removeFlag = false };
-        }
-        else
-        {
-            var nextCache = TemplateConfigDAOCache;
-            nextCache.templates.Add(template.name, new TemplateDAO { name = template.name, path = template.path, removeFlag = false });
-            TemplateConfigDAOCache = nextCache;
-        }
+        var nextCache = TemplateConfigDAOCache;
+        nextCache.templates.Add(template.name, new TemplateDAO { name = template.name, path = template.path, removeFlag = false });
+        TemplateConfigDAOCache = nextCache;
+    }
+
+    public void Update(Template template)
+    {
+        TemplateConfigDAOCache.templates[template.name] = new TemplateDAO { path = template.path, removeFlag = false };
     }
 
     public void Remove(string templateName)
