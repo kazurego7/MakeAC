@@ -7,13 +7,15 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mkac</ToolCommandName>
     <PackageDescription>競技プログラミング(AtCoder)用のテンプレート生成ツール</PackageDescription>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>kazurego7</Authors>
     <RepositoryUrl>https://github.com/kazurego7/MakeAC</RepositoryUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
   
   <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath=""/>
     <PackageReference Include="ConsoleAppFramework" Version="2.2.0" />
     <PackageReference Include="System.Interactive.Async" Version="4.1.1" />
   </ItemGroup>
