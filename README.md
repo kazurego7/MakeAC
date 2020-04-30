@@ -47,3 +47,6 @@ dotnet tool update --global MakeAC
 ```
 dotnet tool uninstall --global MakeAC
 ```
+
+## Nuget Package
+https://www.nuget.org/packages/MakeAC/
