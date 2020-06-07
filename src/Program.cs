@@ -28,9 +28,9 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
     [Command(new[] { "install", "i", }, "テンプレートの登録")]
     public void InstallCommand(
-        [Option(0, "テンプレート名")]string templateName,
-        [Option(1, "テンプレートへのパス")]string templatePath,
-        [Option("u", "テンプレートを上書き登録する")]bool update = false
+        [Option(0, "テンプレート名")] string templateName,
+        [Option(1, "テンプレートへのパス")] string templatePath,
+        [Option("u", "テンプレートを上書き登録する")] bool update = false
         )
     {
         var templateConfig = new TemplateConfig();
@@ -58,7 +58,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
                 Console.Error.WriteLine($"WA! テンプレート名 {installTemplate.name} は登録されていません。");
                 Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
                 Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-                foreach (var template in templateConfig.ListInstalledTemplate())
+                foreach (var template in templateConfig.ListTemplate())
                 {
                     Console.WriteLine($"{template.name} : {template.path}");
                 }
@@ -87,7 +87,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command(new[] { "uninstall", "un", "remove", "rm" }, "テンプレートの登録解除")]
-    public void RemoveCommand([Option(0, "テンプレート名")]string templateName)
+    public void RemoveCommand([Option(0, "テンプレート名")] string templateName)
     {
         var templateConfig = new TemplateConfig();
         if (!templateConfig.IsInstalled(templateName))
@@ -96,7 +96,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-            foreach (var template in templateConfig.ListInstalledTemplate())
+            foreach (var template in templateConfig.ListTemplate())
             {
                 Console.WriteLine($"{template.name} : {template.path}");
             }
@@ -109,52 +109,18 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
     }
 
     [Command(new[] { "list", "ls", }, "テンプレートの一覧")]
-    public void ListCommand([Option("r", "登録解除したテンプレートを表示する")]bool removed = false)
+    public void ListCommand()
     {
         var templateConfig = new TemplateConfig();
-        if (!removed)
+        Console.WriteLine($"テンプレート名 : テンプレートへのパス");
+        foreach (var template in templateConfig.ListTemplate())
         {
-            Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-            foreach (var template in templateConfig.ListInstalledTemplate())
-            {
-                Console.WriteLine($"{template.name} : {template.path}");
-            }
+            Console.WriteLine($"{template.name} : {template.path}");
         }
-        else
-        {
-            Console.WriteLine($"登録解除したテンプレート名 : テンプレートへのパス");
-            foreach (var template in templateConfig.ListRemovedTemplate())
-            {
-                Console.WriteLine($"{template.name} : {template.path}");
-            }
-        }
-    }
-
-    [Command(new[] { "restore", "rs", }, "登録解除したテンプレートの復元")]
-    public void RestoreCommand([Option(0, "テンプレート名")]string templateName)
-    {
-        var templateConfig = new TemplateConfig();
-
-        if (!templateConfig.IsRemoved(templateName))
-        {
-            Console.Error.WriteLine($"WA! {templateName} が登録解除したテンプレート名に存在しません。");
-            Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
-
-            Console.WriteLine($"登録解除したテンプレート名 : テンプレートへのパス");
-            foreach (var template in templateConfig.ListRemovedTemplate())
-            {
-                Console.WriteLine($"{template.name} : {template.path}");
-            }
-            return;
-        }
-
-        templateConfig.Restore(templateName);
-        var restoredTemplate = templateConfig.Get(templateName);
-        Console.WriteLine($"AC! テンプレート {restoredTemplate.name} : {restoredTemplate.path} を復元しました");
     }
 
     [Command(new[] { "new", "n", }, "コンテスト用のプロジェクト作成")]
-    public void CreateCommand([Option(0, "利用するテンプレート名")]string templateName, [Option(1, "作成するコンテスト名")]string contestName)
+    public void CreateCommand([Option(0, "利用するテンプレート名")] string templateName, [Option(1, "作成するコンテスト名")] string contestName)
     {
         var templateConfig = new TemplateConfig();
         if (!templateConfig.IsInstalled(templateName))
@@ -163,7 +129,7 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
             Console.Error.WriteLine($"    テンプレート一覧を確認してください。");
 
             Console.WriteLine($"テンプレート名 : テンプレートへのパス");
-            foreach (var template in templateConfig.ListInstalledTemplate())
+            foreach (var template in templateConfig.ListTemplate())
             {
                 Console.WriteLine($"{template.name} : {template.path}");
             }
@@ -204,4 +170,5 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 
         Console.WriteLine("AC! コンテスト用の各問題の作成が完了しました。");
     }
+
 }

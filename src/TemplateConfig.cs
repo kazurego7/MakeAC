@@ -34,12 +34,7 @@ public class TemplateConfig
 
     public bool IsInstalled(string templateName)
     {
-        return TemplateConfigDAOCache.templates.ContainsKey(templateName) && !TemplateConfigDAOCache.templates[templateName].removeFlag;
-    }
-
-    public bool IsRemoved(string templateName)
-    {
-        return TemplateConfigDAOCache.templates.ContainsKey(templateName) && TemplateConfigDAOCache.templates[templateName].removeFlag;
+        return TemplateConfigDAOCache.templates.ContainsKey(templateName);
     }
 
     public bool IsInvalidPath(string templateName)
@@ -50,13 +45,13 @@ public class TemplateConfig
     public void Add(Template template)
     {
         var nextCache = TemplateConfigDAOCache;
-        nextCache.templates.Add(template.name, new TemplateDAO { name = template.name, path = template.path, removeFlag = false });
+        nextCache.templates.Add(template.name, new TemplateDAO { name = template.name, path = template.path });
         TemplateConfigDAOCache = nextCache;
     }
 
     public void Update(Template template)
     {
-        TemplateConfigDAOCache.templates[template.name] = new TemplateDAO { path = template.path, removeFlag = false };
+        TemplateConfigDAOCache.templates[template.name] = new TemplateDAO { path = template.path };
     }
 
     public void Remove(string templateName)
@@ -64,24 +59,14 @@ public class TemplateConfig
         if (IsInstalled(templateName))
         {
             var nextCache = TemplateConfigDAOCache;
-            nextCache.templates[templateName].removeFlag = true;
-            TemplateConfigDAOCache = nextCache;
-        }
-    }
-
-    public void Restore(string templateName)
-    {
-        if (IsRemoved(templateName))
-        {
-            var nextCache = TemplateConfigDAOCache;
-            nextCache.templates[templateName].removeFlag = false;
+            nextCache.templates.Remove(templateName);
             TemplateConfigDAOCache = nextCache;
         }
     }
 
     public Template Get(string templateName)
     {
-        if (!IsInstalled(templateName) && !IsRemoved(templateName))
+        if (!IsInstalled(templateName))
         {
             throw new IOException("Does not exist template : " + templateName);
         }
@@ -91,17 +76,9 @@ public class TemplateConfig
 
     }
 
-    public IEnumerable<Template> ListInstalledTemplate()
+    public IEnumerable<Template> ListTemplate()
     {
         return TemplateConfigDAOCache.templates
-            .Where(kv => !kv.Value.removeFlag)
-            .Select(kv => new Template { name = kv.Value.name, path = kv.Value.path });
-    }
-
-    public IEnumerable<Template> ListRemovedTemplate()
-    {
-        return TemplateConfigDAOCache.templates
-            .Where(kv => kv.Value.removeFlag)
             .Select(kv => new Template { name = kv.Value.name, path = kv.Value.path });
     }
 }

@@ -8,6 +8,5 @@ public class TemplateDAO
 {
     public string name { get; set; }
     public string path { get; set; }
-    public bool removeFlag { get; set; }
 }
 
