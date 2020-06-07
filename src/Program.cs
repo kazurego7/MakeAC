@@ -11,13 +11,9 @@ class Program : ConsoleAppBase // inherit ConsoleAppBase
 {
     static async Task Main(string[] args)
     {
-        await Task.Run(() =>
-        {
-            var templateConfig = new TemplateConfig();
-            templateConfig.Init();
-        });
-        // target T as ConsoleAppBase.
-        await Host.CreateDefaultBuilder().RunConsoleAppFrameworkAsync<Program>(args);
+        await Host
+        .CreateDefaultBuilder()
+        .RunConsoleAppFrameworkAsync<Program>(args);
     }
 
     [Command(new[] { "ushitapunikiakun", "uk", }, "????????????")]

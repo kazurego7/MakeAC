@@ -9,58 +9,53 @@ public class TemplateConfig
     private static string configFileName = ".actemp";
     private static string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), configFileName);
 
-    private TemplateConfigDAO _templateConfigDAOCache;
-    private TemplateConfigDAO TemplateConfigDAOCache
+    public TemplateConfig()
     {
-        get => _templateConfigDAOCache ?? JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
-        set => _templateConfigDAOCache = value;
-    }
-
-    public void Write()
-    {
-        File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(TemplateConfigDAOCache));
-    }
-
-    public void Init()
-    {
-        if (!File.Exists(configFilePath))
+        if (File.Exists(configFilePath))
         {
-            var templateConfigDTO = new TemplateConfigDAO();
-            templateConfigDTO.templates = new Dictionary<string, TemplateDAO>();
-            TemplateConfigDAOCache = templateConfigDTO;
+            templateConfigDAO = JsonSerializer.Deserialize<TemplateConfigDAO>(File.ReadAllText(configFilePath));
+        }
+        else
+        {
+            var templateConfigDAO = new TemplateConfigDAO();
+            templateConfigDAO.templates = new Dictionary<string, TemplateDAO>();
+            this.templateConfigDAO = templateConfigDAO;
             Write();
         }
     }
 
+    private TemplateConfigDAO templateConfigDAO;
+
+    public void Write()
+    {
+        File.WriteAllText(configFilePath, JsonSerializer.Serialize<TemplateConfigDAO>(templateConfigDAO));
+    }
+
     public bool IsInstalled(string templateName)
     {
-        return TemplateConfigDAOCache.templates.ContainsKey(templateName);
+        return templateConfigDAO.templates.ContainsKey(templateName);
     }
 
     public bool IsInvalidPath(string templateName)
     {
-        return !IsInstalled(templateName) || !Directory.Exists(TemplateConfigDAOCache.templates[templateName].path);
+        return !IsInstalled(templateName) || !Directory.Exists(templateConfigDAO.templates[templateName].path);
     }
 
     public void Add(Template template)
     {
-        var nextCache = TemplateConfigDAOCache;
-        nextCache.templates.Add(template.name, new TemplateDAO { name = template.name, path = template.path });
-        TemplateConfigDAOCache = nextCache;
+        templateConfigDAO.templates.Add(template.name, new TemplateDAO { name = template.name, path = template.path });
     }
 
     public void Update(Template template)
     {
-        TemplateConfigDAOCache.templates[template.name] = new TemplateDAO { path = template.path };
+        templateConfigDAO.templates[template.name].path = template.path;
     }
 
     public void Remove(string templateName)
     {
         if (IsInstalled(templateName))
         {
-            var nextCache = TemplateConfigDAOCache;
-            nextCache.templates.Remove(templateName);
-            TemplateConfigDAOCache = nextCache;
+            templateConfigDAO.templates.Remove(templateName);
         }
     }
 
@@ -71,14 +66,14 @@ public class TemplateConfig
             throw new IOException("Does not exist template : " + templateName);
         }
 
-        var templateDAO = TemplateConfigDAOCache.templates[templateName];
+        var templateDAO = templateConfigDAO.templates[templateName];
         return new Template { name = templateDAO.name, path = templateDAO.path };
 
     }
 
     public IEnumerable<Template> ListTemplate()
     {
-        return TemplateConfigDAOCache.templates
+        return templateConfigDAO.templates
             .Select(kv => new Template { name = kv.Value.name, path = kv.Value.path });
     }
 }
